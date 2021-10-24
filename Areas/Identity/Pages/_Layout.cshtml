@@ -1,0 +1,89 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SelfChef</title>
+    <link rel="icon" href="~/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="~/lib/slick/slick.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/slick/slick-theme.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/icons/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/theme.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/sidebar/demo.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <div class="border-bottom p-3 d-none mobile-nav">
+            <div class="row title d-flex align-items-center">
+                <div class="col-6">
+                    <a asp-controller="Home" asp-action="Index" class="text-decoration-none text-dark">
+                        <img class="mr-2" style="width: 40%" src="~/img/logo.png" />
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a class="toggle" href="#" style="float:right">
+                        <i class="icofont-navigation-menu"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white shadow-sm osahan-main-nav">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white osahan-header py-0 container">
+                <div class="d-flex align-items-start" style="width:50%">
+                    <a class="mr-auto navbar-brand mr-0" asp-controller="Home" asp-action="Index">
+                        <img class="ml-auto img-fluid logo-img" src="~/img/logo.png" />
+                    </a>
+                </div>
+                <button class="navbar-toggler"
+                        type="button"
+                        data-toggle="collapse"
+                        data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="d-flex align-items-end" style="width:50%">
+                    <partial name="_LoginOrRegister" />
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <nav id="main-nav">
+        <ul class="second-nav">
+            <li>
+                <a href="home.html"><i class="icofont-smart-phone mr-2"></i> Home</a>
+            </li>
+            <li>
+                <a href="#"><i class="icofont-login mr-2"></i> Authentication</a>
+                <ul>
+                    <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Login">Sign In</a></li>
+                    <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Sign Up</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2021 - Self-Chef
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/slick/slick.min.js"></script>
+    <script src="~/lib/sidebar/hc-offcanvas-nav.js"></script>
+    <script src="~/js/osahan.js"></script>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

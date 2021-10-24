@@ -1,0 +1,101 @@
+﻿@page
+@model RegisterModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="row">
+    <div class="col-sm-5 mx-auto mt-3">
+        <div class="osahan-signup shadow bg-white p-4 rounded">
+            <div class="px-2">
+                <h3 class="my-0">Let's get started</h3>
+                <p class="small mb-4">
+                    Create account to get access to all the features!
+                </p>
+                <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                    <div asp-validation-summary="ModelOnly" class="form-group text-danger"></div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label asp-for="Input.FirstName"></label>
+                                <input asp-for="Input.FirstName" class="form-control" />
+                                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label asp-for="Input.LastName"></label>
+                                <input asp-for="Input.LastName" class="form-control" />
+                                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Email"></label>
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Password"></label>
+                        <input asp-for="Input.Password" class="form-control" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.ConfirmPassword"></label>
+                        <input asp-for="Input.ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                    <button type="submit"
+                            class="btn btn-success rounded btn-lg btn-block">
+                        Create Account
+                    </button>
+                </form>
+                <p class="text-muted text-center small py-2 m-0">or</p>
+                @*<a asp-controller="GoogleAuth" asp-action="GoogleLogin" class="btn btn-light border btn-block rounded btn-lg btn-google">
+            <i class="icofont-google-plus text-danger mr-2"></i> Sign Up with Google
+        </a>*@
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
+                        <div>
+                        </div>
+                    }
+                    else
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            <div>
+                                <p>
+                                    @foreach (var provider in Model.ExternalLogins)
+                                    {
+                                        if (provider.Name == "Google")
+                                        {
+                                            <button type="submit" class="btn btn-light border btn-block rounded btn-lg btn-google" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                                                <i class="icofont-google-plus text-danger mr-2"></i> Sign In with Google
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit" class="btn btn-light border btn-block rounded btn-lg" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                        }
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
+                }
+                <p class="text-center mt-3 mb-0">
+                    <span class="text-dark ml-auto mr-1 hidden-sm-down">
+                        Already a member?
+                    </span>
+                    <a class="text-dark ml-auto ml-sm-0" asp-area="Identity" asp-page="/Account/Login">
+                        <strong>Sign In</strong>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

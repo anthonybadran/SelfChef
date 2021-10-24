@@ -1,0 +1,328 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using SelfChef.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SelfChef</title>
+    <link rel="icon" href="~/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="~/lib/slick/slick.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/slick/slick-theme.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/icons/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/theme.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/sidebar/demo.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <div class="border-bottom p-3 d-none mobile-nav">
+            <div class="row title d-flex align-items-center">
+                <div class="col-6">
+                    <a asp-controller="Home" asp-action="Index" class="text-decoration-none text-dark">
+                        <img class="mr-2" style="width: 40%" src="~/img/logo.png" />
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a class="toggle" href="#" style="float:right">
+                        <i class="icofont-navigation-menu"></i>
+                    </a>
+                </div>
+            </div>
+            <a href="#" class="text-decoration-none">
+                <div class="input-group mt-3 rounded shadow-sm overflow-hidden bg-white">
+                    <div class="input-group-prepend">
+                        <button class="border-0 btn btn-outline-secondary text-success bg-white">
+                            <i class="icofont-search"></i>
+                        </button>
+                    </div>
+                    <input type="text"
+                           class="shadow-none border-0 form-control pl-0"
+                           placeholder="Search for Products.."
+                           aria-label=""
+                           aria-describedby="basic-addon1" />
+                </div>
+            </a>
+        </div>
+        @*<div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider round"></div>
+                    <i class="icofont-moon"></i>
+                </label>
+                <em>Enable Dark Mode!</em>
+            </div>*@
+        <div class="bg-white shadow-sm osahan-main-nav">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white osahan-header py-0 container">
+                <div class="d-flex align-items-start" style="width:25%">
+                    <a asp-controller="Home" asp-action="Index" class="mr-auto navbar-brand mr-0">
+                        <img class="ml-auto img-fluid logo-img" src="~/img/logo.png" />
+                    </a>
+                </div>
+                <button class="navbar-toggler"
+                        type="button"
+                        data-toggle="collapse"
+                        data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="ml-3 mx-auto my-2 d-flex align-items-center" style="width:50%">
+                    <div class="input-group mr-sm-2 col-lg-12">
+                        <input type="text"
+                               class="form-control"
+                               id="inlineFormInputGroupUsername2"
+                               placeholder="Search for Recipes.." />
+                        <div class="input-group-prepend">
+                            <div class="btn btn-success rounded-right">
+                                <i class="icofont-search"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex align-items-end" style="width:25%">
+                    <partial name="_LoginPartial" />
+                </div>
+            </nav>
+            <div class="bg-color-head">
+                <div class="container menu-bar d-flex align-items-center">
+                    <ul class="list-unstyled form-inline mb-0">
+                        <li class="nav-item active">
+                            <a class="nav-link text-white pl-0" href="home.html">Home</a>
+                        </li>
+                        <li>
+                            <a class="nav-link text-white" href="home.html">Popular Recipes</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link text-white dropdown-toggle"
+                               href="#"
+                               id="navbarDropdown"
+                               role="button"
+                               data-toggle="dropdown"
+                               aria-haspopup="true"
+                               aria-expanded="false">
+                                Category
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="listing.html">Breakfast</a>
+                                <a class="dropdown-item" href="product_details.html">Lunch</a>
+                                <a class="dropdown-item" href="product_details.html">Dinner</a>
+                                <a class="dropdown-item" href="picks_today.html">Appetizer & Snack</a>
+                                <a class="dropdown-item" href="recommend.html">Dessert</a>
+                                <a class="dropdown-item" href="recommend.html">Drink</a>
+                                <a class="dropdown-item" href="recommend.html">Salade</a>
+                                <a class="dropdown-item" href="recommend.html">Soup</a>
+                            </div>
+                        </li>
+                        <li>
+                            <a class="nav-link text-white" href="home.html">Ingredients</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link text-white dropdown-toggle"
+                               href="#"
+                               id="navbarDropdown"
+                               role="button"
+                               data-toggle="dropdown"
+                               aria-haspopup="true"
+                               aria-expanded="false">
+                                Cuisine
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="listing.html">Asian</a>
+                                <a class="dropdown-item" href="product_details.html">International</a>
+                                <a class="dropdown-item" href="product_details.html">Italian</a>
+                                <a class="dropdown-item" href="recommend.html">Mexican</a>
+                                <a class="dropdown-item" href="recommend.html">Middle Eastern</a>
+                            </div>
+                        </li>
+                    </ul>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <div class="list-unstyled form-inline mb-0 ml-auto">
+                            <a asp-controller="Recipes" asp-action="AddOrEdit" class="text-white bg-offer px-3 py-2"><i class="icofont-plus"></i> Add Recipe</a>
+                        </div>   
+                    }
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <nav id="main-nav">
+        <ul class="second-nav">
+            <li>
+                <a href="home.html"><i class="icofont-smart-phone mr-2"></i> Home</a>
+            </li>
+            <li>
+                <a href="#"><i class="icofont-login mr-2"></i> Authentication</a>
+                <ul>
+                    <li><a class="dropdown-item" href="signin.html">Sign In</a></li>
+                    <li><a class="dropdown-item" href="signup.html">Sign Up</a></li>
+                    <li><a href="verification.html">Verification</a></li>
+                </ul>
+            </li>
+            <li><a class="dropdown-item" href="listing.html">Listing</a></li>
+            <li><a class="dropdown-item" href="product_details.html">Detail</a></li>
+            <li><a class="dropdown-item" href="picks_today.html">Trending</a></li>
+            <li><a class="dropdown-item" href="recommend.html">Recommended</a></li>
+            <li>
+                <a class="dropdown-item" href="fresh_vegan.html">Most Popular</a>
+            </li>
+            <li><a class="dropdown-item" href="cart.html">Cart</a></li>
+            <li><a class="dropdown-item" href="checkout.html">Checkout</a></li>
+            <li><a class="dropdown-item" href="successful.html">Successful</a></li>
+            <li>
+                <a href="#"><i class="icofont-sub-listing mr-2"></i> My Order</a>
+                <ul>
+                    <li><a class="dropdown-item" href="my_order.html">My order</a></li>
+                    <li>
+                        <a class="dropdown-item" href="status_complete.html">Status Complete</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="status_onprocess.html">Status on Process</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="status_canceled.html">Status Canceled</a>
+                    </li>
+                    <li><a class="dropdown-item" href="review.html">Review</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="icofont-ui-user mr-2"></i> My Account</a>
+                <ul>
+                    <li>
+                        <a class="dropdown-item" href="my_account.html">My account</a>
+                    </li>
+                    <li><a class="dropdown-item" href="promos.html">Promos</a></li>
+                    <li>
+                        <a class="dropdown-item" href="my_address.html">My address</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="terms_conditions.html">Terms & conditions</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="help_support.html">Help & support</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="help_ticket.html">Help ticket</a>
+                    </li>
+                    <li><a class="dropdown-item" href="signin.html">Logout</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="icofont-page mr-2"></i> Pages</a>
+                <ul>
+                    <li>
+                        <a class="dropdown-item" href="verification.html">Verification</a>
+                    </li>
+                    <li><a class="dropdown-item" href="promos.html">Promos</a></li>
+                    <li>
+                        <a class="dropdown-item" href="promo_details.html">Promo Details</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="terms_conditions.html">Terms & Conditions</a>
+                    </li>
+                    <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
+                    <li>
+                        <a class="dropdown-item" href="terms%26conditions.html">Conditions</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="help_support.html">Help Support</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="help_ticket.html">Help Ticket</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="refund_payment.html">Refund Payment</a>
+                    </li>
+                    <li><a class="dropdown-item" href="faq.html">FAQ</a></li>
+                    <li><a class="dropdown-item" href="signin.html">Sign In</a></li>
+                    <li><a class="dropdown-item" href="signup.html">Sign Up</a></li>
+                    <li><a class="dropdown-item" href="search.html">Search</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="icofont-link mr-2"></i> Navigation Link Example</a>
+                <ul>
+                    <li>
+                        <a href="#">Link Example 1</a>
+                        <ul>
+                            <li>
+                                <a href="#">Link Example 1.1</a>
+                                <ul>
+                                    <li><a href="#">Link</a></li>
+                                    <li><a href="#">Link</a></li>
+                                    <li><a href="#">Link</a></li>
+                                    <li><a href="#">Link</a></li>
+                                    <li><a href="#">Link</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Link Example 1.2</a>
+                                <ul>
+                                    <li><a href="#">Link</a></li>
+                                    <li><a href="#">Link</a></li>
+                                    <li><a href="#">Link</a></li>
+                                    <li><a href="#">Link</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="#">Link Example 2</a></li>
+                    <li><a href="#">Link Example 3</a></li>
+                    <li><a href="#">Link Example 4</a></li>
+                    <li data-nav-custom-content>
+                        <div class="custom-message">
+                            You can add any custom content to your navigation items. This
+                            text is just an example.
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="bottom-nav">
+            <li class="email">
+                <a class="text-success" href="home.html">
+                    <p class="h5 m-0"><i class="icofont-home text-success"></i></p>
+                    Home
+                </a>
+            </li>
+            <li class="github">
+                <a href="cart.html">
+                    <p class="h5 m-0"><i class="icofont-cart"></i></p>
+                    CART
+                </a>
+            </li>
+            <li class="ko-fi">
+                <a href="help_ticket.html">
+                    <p class="h5 m-0"><i class="icofont-headphone"></i></p>
+                    Help
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2021 - Self-Chef
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/slick/slick.min.js"></script>
+    <script src="~/lib/sidebar/hc-offcanvas-nav.js"></script>
+    <script src="~/js/osahan.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

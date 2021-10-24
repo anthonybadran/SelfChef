@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31424.327
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SelfChef", "SelfChef.csproj", "{94188CA9-6B89-4910-AEF1-FDE7B2509906}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{94188CA9-6B89-4910-AEF1-FDE7B2509906}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94188CA9-6B89-4910-AEF1-FDE7B2509906}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94188CA9-6B89-4910-AEF1-FDE7B2509906}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94188CA9-6B89-4910-AEF1-FDE7B2509906}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {91EF5996-6EA4-43E4-96EB-374C2858ABF1}
+	EndGlobalSection
+EndGlobal

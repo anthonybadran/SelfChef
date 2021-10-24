@@ -1,0 +1,22 @@
+﻿@{
+    var pageName = ViewData["Title"]?? string.Empty;
+    var canLogin = new string[] { "Register", "Forgotpassword", "Lockout", "Logout" }.ToList().Contains(pageName);
+}
+@if (canLogin)
+{
+    <span class="text-dark ml-auto mr-1 hidden-sm-down">
+        Already a member?
+    </span>
+    <a class="text-dark ml-auto ml-sm-0" asp-area="Identity" asp-page="/Account/Login">
+        <strong>Sign In</strong>
+    </a>
+}
+else
+{
+    <span class="text-dark ml-auto mr-1 hidden-sm-down">
+        Don't have an account?
+    </span>
+    <a class="text-dark ml-auto ml-sm-0" asp-area="Identity" asp-page="/Account/Register">
+        <strong>Sign Up</strong>
+    </a>
+}
