@@ -361,10 +361,24 @@ namespace SelfChef.Migrations
                     b.Property<string>("Author")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("CookTime")
                         .HasColumnType("float");
 
+                    b.Property<string>("Cuisine")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Directions")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Ingredients")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -372,6 +386,9 @@ namespace SelfChef.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Picture")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PictureName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("PrepTime")

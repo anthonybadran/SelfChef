@@ -11,7 +11,7 @@
     <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="~/css/theme.css" />
     <link rel="stylesheet" type="text/css" href="~/lib/sidebar/demo.css" />
-    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/site-identity.css" />
 </head>
 <body>
     <header>
@@ -51,11 +51,14 @@
             </nav>
         </div>
     </header>
-
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <div class="page-content-wrapper bg-transparent m-0">
+        <div class="flex-1" style="background: url('/img/orange-background.jpg') no-repeat center bottom fixed; background-size: cover; min-height: stretch">
+            <div class="container py-4 mb-lg-5">
+                <main role="main" class="pb-3">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
     </div>
 
     <nav id="main-nav">
@@ -72,11 +75,6 @@
             </li>
         </ul>
     </nav>
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - Self-Chef
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/slick/slick.min.js"></script>

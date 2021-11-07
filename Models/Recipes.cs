@@ -46,5 +46,19 @@ namespace SelfChef.Models
         [DataType(DataType.Date)]
         [Display(Name = "Modified Date")]
         public DateTime? ModifiedDate { get; set; }
+
+        [Required]
+        [Display(Name = "Ingredients")]
+        public string Ingredients { get; set; }
+
+        [Required]
+        [Display(Name = "Directions")]
+        public string Directions { get; set; }
+        
+        public string PictureName { get; set; }
+
+        public string Category { get; set; }
+
+        public string Cuisine { get; set; }
     }
 }

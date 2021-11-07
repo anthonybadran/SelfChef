@@ -1,4 +1,5 @@
-﻿@{
+﻿@model SelfChef.Models.Recipes
+@{
     ViewData["Title"] = "Recipe";
     Layout = null;
 }
@@ -16,7 +17,10 @@
     <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="~/css/theme.css" />
     <link rel="stylesheet" type="text/css" href="~/lib/sidebar/demo.css" />
-    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/dropzone-5.7.0/dropzone.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/select2/css/select2.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/site-identity.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/site-addoredit.css" />
 </head>
 <body>
     <header>
@@ -33,95 +37,203 @@
                     </a>
                 </div>
             </div>
+            <a href="#" class="text-decoration-none">
+                <form asp-controller="Home" asp-action="Index">
+                    <div class="input-group mt-3 rounded shadow-sm overflow-hidden bg-white" style="border: 1px #EB563B solid">
+                        <div class="input-group-prepend">
+                            <button type="submit" value="Filter" class="border-0 btn btn-outline-secondary text-success bg-white">
+                                <i class="icofont-search"></i>
+                            </button>
+                        </div>
+                        <input type="text" name="SearchString"
+                               class="shadow-none border-0 form-control pl-0"
+                               placeholder="Search for Recipes.."
+                               value="@ViewBag.query"
+                               aria-label=""
+                               aria-describedby="basic-addon1" />
+                    </div>
+                </form>
+            </a>
         </div>
         <div class="bg-white shadow-sm osahan-main-nav">
-            <nav class="navbar navbar-expand-lg navbar-light bg-white osahan-header py-0 container">
-                <div class="d-flex align-items-start" style="width:50%">
-                    <a class="mr-auto navbar-brand mr-0" asp-controller="Home" asp-action="Index">
-                        <img class="ml-auto img-fluid logo-img" src="~/img/logo.png" />
-                    </a>
-                </div>
-                <button class="navbar-toggler"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="d-flex align-items-end" style="width:50%">
-                    <partial name="_LoginPartial" />
-                </div>
-            </nav>
-        </div>
-    </header>
-
-    <div class="container">
-        <main role="main" class="pb-3">
-            <div class="row">
-                <div class="col-sm-5 mx-auto mt-3">
-                    <div class="shadow bg-white p-4 rounded">
-                        <div class="px-2">
-                            <h3 class="my-0">Let's get started</h3>
-                            <p class="small mb-4">
-                                Create account to get access to all the features!
-                            </p>
-                            <form method="post">
-                                <div asp-validation-summary="ModelOnly" class="form-group text-danger"></div>
-                                <button type="submit"
-                                        class="btn btn-success rounded btn-lg btn-block">
-                                    Create Account
-                                </button>
-                            </form>
-                            <p class="text-muted text-center small py-2 m-0">or</p>
-                            @*<a asp-controller="GoogleAuth" asp-action="GoogleLogin" class="btn btn-light border btn-block rounded btn-lg btn-google">
-                        <i class="icofont-google-plus text-danger mr-2"></i> Sign Up with Google
-                    </a>*@
-                            @{
-                                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                                {
-                                    <div>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                                        <div>
-                                            <p>
-                                                @foreach (var provider in Model.ExternalLogins)
-                                                {
-                                                    if (provider.Name == "Google")
-                                                    {
-                                                        <button type="submit" class="btn btn-light border btn-block rounded btn-lg btn-google" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
-                                                            <i class="icofont-google-plus text-danger mr-2"></i> Sign In with Google
-                                                        </button>
-                                                    }
-                                                    else
-                                                    {
-                                                        <button type="submit" class="btn btn-light border btn-block rounded btn-lg" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                                    }
-                                                }
-                                            </p>
-                                        </div>
-                                    </form>
-                                }
-                            }
-                            <p class="text-center mt-3 mb-0">
-                                <span class="text-dark ml-auto mr-1 hidden-sm-down">
-                                    Already a member?
-                                </span>
-                                <a class="text-dark ml-auto ml-sm-0" asp-area="Identity" asp-page="/Account/Login">
-                                    <strong>Sign In</strong>
-                                </a>
-                            </p>
-                        </div>
+            <nav class="navbar navbar-expand-lg navbar-light bg-white osahan-header py-0 fixed-top shadow-sm">
+                <div class="container">
+                    <div class="d-flex align-items-start" style="width:50%">
+                        <a class="mr-auto navbar-brand mr-0" asp-controller="Home" asp-action="Index">
+                            <img class="ml-auto img-fluid logo-img" src="~/img/logo.png" />
+                        </a>
+                    </div>
+                    <button class="navbar-toggler"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="mx-auto my-2 d-flex align-items-center">
+                        <form asp-controller="Home" asp-action="Index">
+                            <div class="input-group mr-sm-2 col-lg-12" style="width: 35em">
+                                <input type="text" name="SearchString"
+                                       class="form-control"
+                                       id="inlineFormInputGroupUsername2"
+                                       value="@ViewBag.query"
+                                       placeholder="Search for Recipes.." />
+                                <div class="input-group-prepend">
+                                    <button type="submit" value="Filter" class="btn btn-success rounded-right">
+                                        <i class="icofont-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="d-flex align-items-end" style="width:50%">
+                        <partial name="_LoginPartial" />
                     </div>
                 </div>
+            </nav>
+            <div style="background-color: #EB563B">
+                <div class="container menu-bar d-flex align-items-center">
+                    <ul class="list-unstyled form-inline mb-0">
+                        <li class="nav-item active">
+                            <a class="nav-link text-white pl-0" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="text-white pl-0"><i class="icofont-simple-right"></i></li>
+                        <li class="disabled">
+                            <a class="nav-link text-white">Add Recipes</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-        </main>
+        </div>
+    </header>
+    <div class="page-content-wrapper bg-transparent m-0">
+        <div class="flex-1" style="background: url('/img/orange-background.jpg') no-repeat center bottom fixed; background-size: cover; min-height: stretch">
+            <div class="container py-4 mb-lg-5">
+                <main role="main" class="pb-3">
+                    <div class="row">
+                        <div class="col-12 mx-auto mt-3">
+                            <div class="shadow bg-white p-4 rounded">
+                                <div class="px-2">
+                                    <h3>Submit a Recipe</h3>
+                                    <form method="post" enctype="multipart/form-data" asp-controller="Recipes" asp-action="AddOrEdit" class="needs-validation" novalidate>
+                                        <div asp-validation-summary="ModelOnly" class="form-group text-danger"></div>
+                                        <input type="hidden" id="picture-path" asp-for="Picture" />
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <div class="row">
+                                                    <div class="col mt-3">
+                                                        <label asp-for="Title">Title <span class="text-danger">*</span></label>
+                                                        <input id="title" asp-for="Title" class="form-control" required />
+                                                        <span asp-validation-for="Title" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col mt-3">
+                                                        <label asp-for="Description">Description <span class="text-danger">*</span></label>
+                                                        <textarea id="description" asp-for="Description" class="form-control" rows="5" placeholder="Describe the recipe in a few lines." required></textarea>
+                                                        <span asp-validation-for="Description" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col mt-3">
+                                                        <label asp-for="Ingredients">Ingredients <span class="text-danger">*</span></label>
+                                                        <textarea id="ingredients" asp-for="Ingredients" class="form-control" rows="5" placeholder="Put each ingredient on a seperate line." required></textarea>
+                                                        <span asp-validation-for="Ingredients" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col mt-3">
+                                                        <label asp-for="Directions">Directions <span class="text-danger">*</span></label>
+                                                        <textarea id="directions" asp-for="Directions" class="form-control" rows="5" placeholder="Put each direction on a seperate line." required></textarea>
+                                                        <span asp-validation-for="Directions" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4" id="dropzoneDiv">
+                                                <div class="row">
+                                                    <div class="col mt-4">
+                                                        <div class="dropzone bg-white p-4 rounded mx-auto" id="uploader" style="border: 1px solid lightgrey; text-align: center; margin-top: 13px; height: 96%; margin-bottom: 5px">
+                                                            <div class="dz-message" data-dz-message><i class="icofont-camera h1" style="color: grey"></i><br /><span style="color: grey">Add Picture</span></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row mt-2">
+                                                    <div class="col-sm-6 mt-3">
+                                                        <label asp-for="PrepTime">Prep. Time (min)<span class="text-danger">*</span></label>
+                                                        <input id="preptime" asp-for="PrepTime" class="form-control" type="number" step="0.01" />
+                                                        <span asp-validation-for="PrepTime" class="text-danger"></span>
+                                                    </div>
+                                                    <div class="col-sm-6 mt-3">
+                                                        <label asp-for="CookTime">Cook Time (min)<span class="text-danger">*</span></label>
+                                                        <input id="cooktime" asp-for="CookTime" class="form-control" type="number" step="0.01" />
+                                                        <span asp-validation-for="CookTime" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-6 mt-3">
+                                                        <label asp-for="Servings">Servings (min)<span class="text-danger">*</span></label>
+                                                        <input id="servings" asp-for="Servings" class="form-control" type="number" step="0.01" />
+                                                        <span asp-validation-for="Servings" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-8 mt-3">
+                                                <label for="categories" class="control-label">Category</label>
+                                                <select id="categories" class="js-example-basic-multiple custom-select select2" name="categories" multiple="multiple">
+                                                    <option value="Breakfast">Breakfast</option>
+                                                    <option value="Lunch">Lunch</option>
+                                                    <option value="Dinner">Dinner</option>
+                                                    <option value="Appetizer & Snack">Alabama</option>
+                                                    <option value="Dessert">Dessert</option>
+                                                    <option value="Drink">Drink</option>
+                                                    <option value="Salade">Salade</option>
+                                                    <option value="Soup">Soup</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-8 mt-3">
+                                                <label for="cuisines" class="control-label">Cuisine</label>
+                                                <select id="cuisines" class="js-example-basic-multiple custom-select select2" name="cuisines" multiple="multiple">
+                                                    <option value="Asian">Asian</option>
+                                                    <option value="International">International</option>
+                                                    <option value="Italien">Italien</option>
+                                                    <option value="Mexican">Mexican</option>
+                                                    <option value="Middle Eastern">Middle Eastern</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col">
+                                                <div class="form-check">
+                                                    <input asp-for="Private" class="form-check-input" type="checkbox" value="" id="private">
+                                                    <label class="form-check-label" for="private">
+                                                        Private Recipe (Only you can see it)
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col">
+                                                <div class="form-group">
+                                                    <button id="submit-all" type="submit" class="btn btn-success float-right">Submit</button>
+                                                    <a class="btn btn-secondary d float-right mr-2" asp-controller="Home" asp-action="Index">Cancel</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
     </div>
-
     <nav id="main-nav">
         <ul class="second-nav">
             <li>
@@ -129,17 +241,102 @@
             </li>
         </ul>
     </nav>
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2021 - Self-Chef
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/slick/slick.min.js"></script>
     <script src="~/lib/sidebar/hc-offcanvas-nav.js"></script>
     <script src="~/js/osahan.js"></script>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="~/lib/dropzone-5.7.0/dropzone.min.js"></script>
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+
+        Dropzone.options.uploader = {
+            url: "/Recipes/UploadImage",
+            uploadMultiple: false,
+            maxFiles: 1,
+            acceptedFiles: 'image/*',
+            init: function () {
+                var wrapperThis = this;
+
+                this.on("success", function (file, response) {
+                    $("#picture-path").val(response);
+                });
+
+                this.on("addedfile", function (file) {
+                    // Create the remove button
+                    var removeButton = Dropzone.createElement("<button class='btn btn-lg dark'>Remove File</button>");
+                    // Listen to the click event
+                    removeButton.addEventListener("click", function (e) {
+                        // Make sure the button click doesn't submit the form:
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        // Remove the file preview.
+                        wrapperThis.removeFile(file);
+                        // If you want to the delete the file on the server as well,
+                        // you can do the AJAX request here.
+                        $.ajax({
+                            type: "POST",
+                            url: "/Recipes/DeleteImage",
+                            data: {
+                                path: $("#picture-path").val()
+                            },
+                            success: function (res) {
+                                console.log(res);
+                            },
+                            error: function (err) {
+                                console.log(err);
+                            }
+                        });
+                    });
+                    // Add the button to the file preview element.
+                    file.previewElement.appendChild(removeButton);
+                });
+
+                this.on("maxfilesexceeded", function (file) {
+                    this.removeAllFiles();
+                    $.ajax({
+                        type: "POST",
+                        url: "/Recipes/DeleteImage",
+                        data: {
+                            path: $("#picture-path").val()
+                        },
+                        success: function (res) {
+                            console.log(res);
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    });
+                    this.addFile(file);
+                });
+            }
+        };
+
+        $(document).ready(function () {
+            $('.js-example-basic-multiple').select2({
+                placeholder: 'Choose one or many items',
+            });
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,131 @@
+﻿@model SelfChef.Models.Recipes
+@{
+    ViewData["Title"] = "Details";
+    string[] ingredients = Model.Ingredients.Split(Environment.NewLine,
+                            StringSplitOptions.RemoveEmptyEntries);
+    string[] directions = Model.Directions.Split(Environment.NewLine,
+                            StringSplitOptions.RemoveEmptyEntries);
+    string[] categories = new string[] { "" };
+    string[] cuisines = new string[] { "" };
+    if (Model.Category != null)
+    {
+        categories = Model.Category.Split(Environment.NewLine,
+                            StringSplitOptions.RemoveEmptyEntries);
+    }
+    if (Model.Cuisine != null)
+    {
+        cuisines = Model.Cuisine.Split(Environment.NewLine,
+                            StringSplitOptions.RemoveEmptyEntries);
+    }
+
+    int i = 1;
+}
+
+<div class="row mt-3">
+    <div class="col-lg-7">
+        <div class="p-4 bg-white rounded shadow-sm mb-3">
+            <div class="pt-0">
+                <h1 class="font-weight-bold">@Model.Title</h1>
+                <a href="review.html">
+                    <div class="rating-wrap d-flex align-items-center mt-2">
+                        <ul class="rating-stars list-unstyled">
+                            <li>
+                                <i class="icofont-star text-warning"></i>
+                                <i class="icofont-star text-warning"></i>
+                                <i class="icofont-star text-warning"></i>
+                                <i class="icofont-star text-warning"></i>
+                                <i class="icofont-star"></i>
+                            </li>
+                        </ul>
+                        <p class="label-rating text-muted ml-2 small">
+                            (245 Reviews)
+                        </p>
+                    </div>
+                </a>
+            </div>
+            <div class="details">
+                <div class="pt-3">
+                    <p class="font-weight-bold mb-2">Description</p>
+                    <p class="text-muted small mb-0">
+                        @Model.Description
+                    </p>
+                </div>
+            </div>
+            @if (Model.Picture != null)
+            {
+                <div class="mt-4 mb-5">
+                    <div>
+                        <img src="@("/img/recipes/"+Model.PictureName)"
+                             class="img-fluid mx-auto shadow-sm rounded"
+                             alt="Recipe" />
+                    </div>
+                </div>
+            }
+            <hr />
+            <div class="mt-5">
+                <h4 class="mb-3">Ingredients</h4>
+                @foreach (var ingredient in ingredients)
+                {
+                    <div class="mb-4" style="font-size: 1rem">
+                        &nbsp;<i class="icofont-minus"></i> <span>@ingredient</span>
+                    </div>
+                }
+            </div>
+            <hr />
+            <div class="mt-5">
+                <h4 class="mb-3">Directions</h4>
+                @foreach (var direction in directions)
+                {
+                    <strong style="font-size: 1rem">Step @i</strong>
+                    <div class="mb-4">
+                        &nbsp;<span>@direction</span>
+                    </div>
+                    i++;
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="p-4 bg-white rounded shadow-sm mb-3" style="font-size: 1rem">
+            <div class="mb-4">
+                <strong>Prep. Time: </strong><span>@Model.PrepTime</span> mins
+            </div>
+            <div class="mb-4">
+                <strong>Cook Time: </strong><span>@Model.CookTime</span> mins
+            </div>
+            <div class="mb-4">
+                <strong>Total Time: </strong><span>@(Model.CookTime + Model.PrepTime)</span> mins
+            </div>
+            <div>
+                <strong>Servings: </strong><span>@Model.Servings</span>
+            </div>
+        </div>
+    </div>
+    @if (Model.Category != null || Model.Cuisine != null)
+    {
+        <div class="col-lg-3">
+            <div class="p-4 bg-white rounded shadow-sm mb-3" style="font-size: 1rem">
+                @if (Model.Category != null)
+                {
+                    <div class="mb-4">
+                        <strong>Category: </strong>
+                        @foreach (string category in categories)
+                        {
+                            <span class="badge badge-secondary">@category</span>
+                        }
+                    </div>
+                }
+                @if (Model.Cuisine.Length != null)
+                {
+                    <div class="mb-4">
+                        <strong>Cuisine: </strong>
+                        @foreach (string cuisine in cuisines)
+                        {
+                            <span class="badge badge-secondary">@cuisine</span>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>

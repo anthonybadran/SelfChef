@@ -1,3 +1,79 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<SelfChef.Models.Recipes>
+@{
+    ViewData["Title"] = "Home";
 }
+
+@if (ViewBag.category != null)
+{
+    <div class="row mt-3">
+        <div class="col">
+            <h4>Category: @ViewBag.category</h4>
+        </div>
+    </div>
+}
+@if (ViewBag.cuisine != null)
+{
+    <div class="row mt-3">
+        <div class="col">
+            <h4>Cuisine: @ViewBag.cuisine</h4>
+        </div>
+    </div>
+}
+
+<div class="row">
+    @foreach (var recipe in Model)
+    {
+        <div class="col-12 col-md-4 mt-4">
+            <a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.RecipeID"
+               class="text-dark text-decoration-none">
+                <div class="
+                        list-card
+                        bg-white
+                        h-100
+                        rounded
+                        overflow-hidden
+                        position-relative
+                        shadow-sm
+                      ">
+                    <div class="rounded m-0">
+                        <div class="m-2 rounded" style="overflow: hidden; height: 200px;">
+                            @if (recipe.Picture != null)
+                            {
+                                <img src="@("/img/recipes/"+recipe.PictureName)"
+                                     class="img-fluid mx-auto rounded"
+                                     alt="Recipe image" style="min-width: 100%; min-height: 100%;" />
+                            }
+                            else
+                            {
+                                <img src="~/img/orange-background.jpg"
+                                     class="img-fluid mx-auto rounded"
+                                     alt="Recipe image" style="min-width: 100%; min-height: 100%;" />
+                            }
+                        </div>
+                    </div>
+                    <div class="p-3 position-relative">
+                        <h6 class="mb-1 font-weight-bold text-success">
+                            @recipe.Title
+                        </h6>
+                        <p class="text-muted">
+                            @if (recipe.Description.Length > 30)
+                            {
+                                @(recipe.Description.Substring(0, 30))<span>...</span>
+                            }
+                            else
+                            {
+                                @recipe.Description
+                            }
+                        </p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+    @if (Model.Count() == 0)
+    {
+        <div class="col center-block text-center align-self-center" style="margin-top: 15%">
+            <h4 class="text-secondary">Sorry, No Results Found :(</h4>
+        </div>
+    }
+</div>

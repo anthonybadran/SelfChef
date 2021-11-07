@@ -35,7 +35,7 @@ namespace SelfChef
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-
+            services.ConfigureApplicationCookie(options => options.LoginPath = "/Identity/Account/Login");
             services.AddAuthentication()
                 .AddGoogle(options =>
                 {

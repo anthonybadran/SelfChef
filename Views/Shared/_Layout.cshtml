@@ -3,6 +3,11 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+@{ 
+    var user = await UserManager.GetUserAsync(User);
+    var firstName = user?.FirstName;
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,6 +21,7 @@
     <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="~/css/theme.css" />
     <link rel="stylesheet" type="text/css" href="~/lib/sidebar/demo.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/select2/css/select2.min.css" />
     <link rel="stylesheet" type="text/css" href="~/css/site.css" />
 </head>
 <body>
@@ -34,18 +40,21 @@
                 </div>
             </div>
             <a href="#" class="text-decoration-none">
-                <div class="input-group mt-3 rounded shadow-sm overflow-hidden bg-white">
-                    <div class="input-group-prepend">
-                        <button class="border-0 btn btn-outline-secondary text-success bg-white">
-                            <i class="icofont-search"></i>
-                        </button>
+                <form asp-controller="Home" asp-action="Index">
+                    <div class="input-group mt-3 rounded shadow-sm overflow-hidden bg-white">
+                        <div class="input-group-prepend">
+                            <button type="submit" value="Filter" class="border-0 btn btn-outline-secondary text-success bg-white">
+                                <i class="icofont-search"></i>
+                            </button>
+                        </div>
+                        <input type="text" name="SearchString"
+                               class="shadow-none border-0 form-control pl-0"
+                               placeholder="Search for Recipes.."
+                               value="@ViewBag.query"
+                               aria-label=""
+                               aria-describedby="basic-addon1" />
                     </div>
-                    <input type="text"
-                           class="shadow-none border-0 form-control pl-0"
-                           placeholder="Search for Products.."
-                           aria-label=""
-                           aria-describedby="basic-addon1" />
-                </div>
+                </form>
             </a>
         </div>
         @*<div class="theme-switch-wrapper">
@@ -57,46 +66,51 @@
                 <em>Enable Dark Mode!</em>
             </div>*@
         <div class="bg-white shadow-sm osahan-main-nav">
-            <nav class="navbar navbar-expand-lg navbar-light bg-white osahan-header py-0 container">
-                <div class="d-flex align-items-start" style="width:25%">
-                    <a asp-controller="Home" asp-action="Index" class="mr-auto navbar-brand mr-0">
-                        <img class="ml-auto img-fluid logo-img" src="~/img/logo.png" />
-                    </a>
-                </div>
-                <button class="navbar-toggler"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="ml-3 mx-auto my-2 d-flex align-items-center" style="width:50%">
-                    <div class="input-group mr-sm-2 col-lg-12">
-                        <input type="text"
-                               class="form-control"
-                               id="inlineFormInputGroupUsername2"
-                               placeholder="Search for Recipes.." />
-                        <div class="input-group-prepend">
-                            <div class="btn btn-success rounded-right">
-                                <i class="icofont-search"></i>
-                            </div>
-                        </div>
+            <nav class="navbar navbar-expand-lg navbar-light bg-white osahan-header py-0 fixed-top shadow-sm">
+                <div class="container">
+                    <div class="d-flex align-items-start" style="width:25%">
+                        <a asp-controller="Home" asp-action="Index" class="mr-auto navbar-brand mr-0">
+                            <img class="ml-auto img-fluid logo-img" src="~/img/logo.png" />
+                        </a>
                     </div>
-                </div>
-                <div class="d-flex align-items-end" style="width:25%">
-                    <partial name="_LoginPartial" />
+                    <button class="navbar-toggler"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="mx-auto my-2 d-flex align-items-center">
+                        <form asp-controller="Home" asp-action="Index">
+                            <div class="input-group mr-sm-2 col-lg-12" style="width: 35em">
+                                <input type="text" name="SearchString"
+                                       class="form-control"
+                                       id="inlineFormInputGroupUsername2"
+                                       value="@ViewBag.query"
+                                       placeholder="Search for Recipes.." />
+                                <div class="input-group-prepend">
+                                    <button type="submit" value="Filter" class="btn btn-success rounded-right">
+                                        <i class="icofont-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="d-flex align-items-end" style="width:25%">
+                        <partial name="_LoginPartial" />
+                    </div>
                 </div>
             </nav>
             <div class="bg-color-head">
                 <div class="container menu-bar d-flex align-items-center">
                     <ul class="list-unstyled form-inline mb-0">
                         <li class="nav-item active">
-                            <a class="nav-link text-white pl-0" href="home.html">Home</a>
+                            <a class="nav-link text-white pl-0" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li>
-                            <a class="nav-link text-white" href="home.html">Popular Recipes</a>
+                            <a class="nav-link text-white" href="#">Popular Recipes</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link text-white dropdown-toggle"
@@ -109,18 +123,76 @@
                                 Category
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="listing.html">Breakfast</a>
-                                <a class="dropdown-item" href="product_details.html">Lunch</a>
-                                <a class="dropdown-item" href="product_details.html">Dinner</a>
-                                <a class="dropdown-item" href="picks_today.html">Appetizer & Snack</a>
-                                <a class="dropdown-item" href="recommend.html">Dessert</a>
-                                <a class="dropdown-item" href="recommend.html">Drink</a>
-                                <a class="dropdown-item" href="recommend.html">Salade</a>
-                                <a class="dropdown-item" href="recommend.html">Soup</a>
+                                @{
+                                    if (ViewBag.Category == "Breakfast")
+                                    {
+                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-category="Breakfast">Breakfast</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Breakfast">Breakfast</a>
+                                    }
+                                    if (ViewBag.Category == "Lunch")
+                                    {
+                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-category="Lunch">Lunch</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Lunch">Lunch</a>
+                                    }
+                                    if (ViewBag.Category == "Dinner")
+                                    {
+                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-category="Dinner">Dinner</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Dinner">Dinner</a>
+                                    }
+                                    if (ViewBag.Category == "Appetizer & Snack")
+                                    {
+                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-category="Appetizer & Snack">Appetizer & Snack</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Appetizer & Snack">Appetizer & Snack</a>
+                                    }
+                                    if (ViewBag.Category == "Dessert")
+                                    {
+                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-category="Dessert">Dessert</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Dessert">Dessert</a>
+                                    }
+                                    if (ViewBag.Category == "Drink")
+                                    {
+                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-category="Drink">Drink</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Drink">Drink</a>
+                                    }
+                                    if (ViewBag.Category == "Salade")
+                                    {
+                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-category="Salade">Salade</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Salade">Salade</a>
+                                    }
+                                    if (ViewBag.Category == "Soup")
+                                    {
+                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-category="Soup">Soup</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Soup">Soup</a>
+                                    }
+                                }
                             </div>
                         </li>
                         <li>
-                            <a class="nav-link text-white" href="home.html">Ingredients</a>
+                            <a class="nav-link text-white" href="#">Ingredients</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link text-white dropdown-toggle"
@@ -133,11 +205,48 @@
                                 Cuisine
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="listing.html">Asian</a>
-                                <a class="dropdown-item" href="product_details.html">International</a>
-                                <a class="dropdown-item" href="product_details.html">Italian</a>
-                                <a class="dropdown-item" href="recommend.html">Mexican</a>
-                                <a class="dropdown-item" href="recommend.html">Middle Eastern</a>
+                                @{
+                                    if (ViewBag.Cuisine == "Asian")
+                                    {
+                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-cuisine="Asian">Asian</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-cuisine="Asian">Asian</a>
+                                    }
+                                    if (ViewBag.Cuisine == "International")
+                                    {
+                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-cuisine="International">International</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-cuisine="International">International</a>
+                                    }
+                                    if (ViewBag.Cuisine == "Italian")
+                                    {
+                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-cuisine="Italian">Italian</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-cuisine="Italian">Italian</a>
+                                    }
+                                    if (ViewBag.Cuisine == "Mexican")
+                                    {
+                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-cuisine="Mexican">Mexican</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-cuisine="Mexican">Mexican</a>
+                                    }
+                                    if (ViewBag.Cuisine == "Middle Eastern")
+                                    {
+                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-cuisine="Middle Eastern">Middle Eastern</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-cuisine="Middle Eastern">Middle Eastern</a>
+                                    }
+                                }
                             </div>
                         </li>
                     </ul>
@@ -145,10 +254,46 @@
                     {
                         <div class="list-unstyled form-inline mb-0 ml-auto">
                             <a asp-controller="Recipes" asp-action="AddOrEdit" class="text-white bg-offer px-3 py-2"><i class="icofont-plus"></i> Add Recipe</a>
-                        </div>   
+                        </div>
                     }
                 </div>
             </div>
+            @if ((string)ViewData["Title"] != "Home" || ViewBag.category != null || ViewBag.cuisine != null)
+            {
+                <nav aria-label="breadcrumb" class="breadcrumb mb-0">
+                    <div class="container">
+                        <ol class="d-flex align-items-center mb-0 p-0">
+                            <li class="breadcrumb-item">
+                                <a asp-controller="Home" asp-action="Index" class="text-success">Home</a>
+                            </li>
+                            @if (ViewBag.category != null)
+                            {
+                                <li class="breadcrumb-item active">
+                                    Category
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    @ViewBag.category
+                                </li>
+                            }
+                            else if (ViewBag.cuisine != null)
+                            {
+                                <li class="breadcrumb-item active">
+                                    Cuisine
+                                </li>
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    @ViewBag.cuisine
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="breadcrumb-item active" aria-current="page">
+                                    @ViewData["Title"]
+                                </li>
+                            }
+                        </ol>
+                    </div>
+                </nav>
+            }
         </div>
     </header>
 
@@ -160,155 +305,64 @@
 
     <nav id="main-nav">
         <ul class="second-nav">
+            @if (!SignInManager.IsSignedIn(User))
+            {
+                <li>
+                    <a href="#"><i class="icofont-login mr-2"></i>Authentication</a>
+                    <ul>
+                        <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Login">Sign In</a></li>
+                        <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Sign Up</a></li>
+                    </ul>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a id="manage" class="nav-link text-dark ml-auto" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello, @firstName!</a>
+                </li>
+            }
             <li>
-                <a href="home.html"><i class="icofont-smart-phone mr-2"></i> Home</a>
+                <a asp-controller="Home" asp-action="Index">Home</a>
             </li>
+            <li><a class="dropdown-item" href="#">Popular Recipes</a></li>
             <li>
-                <a href="#"><i class="icofont-login mr-2"></i> Authentication</a>
-                <ul>
-                    <li><a class="dropdown-item" href="signin.html">Sign In</a></li>
-                    <li><a class="dropdown-item" href="signup.html">Sign Up</a></li>
-                    <li><a href="verification.html">Verification</a></li>
-                </ul>
-            </li>
-            <li><a class="dropdown-item" href="listing.html">Listing</a></li>
-            <li><a class="dropdown-item" href="product_details.html">Detail</a></li>
-            <li><a class="dropdown-item" href="picks_today.html">Trending</a></li>
-            <li><a class="dropdown-item" href="recommend.html">Recommended</a></li>
-            <li>
-                <a class="dropdown-item" href="fresh_vegan.html">Most Popular</a>
-            </li>
-            <li><a class="dropdown-item" href="cart.html">Cart</a></li>
-            <li><a class="dropdown-item" href="checkout.html">Checkout</a></li>
-            <li><a class="dropdown-item" href="successful.html">Successful</a></li>
-            <li>
-                <a href="#"><i class="icofont-sub-listing mr-2"></i> My Order</a>
-                <ul>
-                    <li><a class="dropdown-item" href="my_order.html">My order</a></li>
-                    <li>
-                        <a class="dropdown-item" href="status_complete.html">Status Complete</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="status_onprocess.html">Status on Process</a>
-                    </li>
-                    <li>
-                        <a class="dropdown-item" href="status_canceled.html">Status Canceled</a>
-                    </li>
-                    <li><a class="dropdown-item" href="review.html">Review</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#"><i class="icofont-ui-user mr-2"></i> My Account</a>
+                <a href="#">Category</a>
                 <ul>
                     <li>
-                        <a class="dropdown-item" href="my_account.html">My account</a>
-                    </li>
-                    <li><a class="dropdown-item" href="promos.html">Promos</a></li>
-                    <li>
-                        <a class="dropdown-item" href="my_address.html">My address</a>
+                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Breakfast">Breakfast</a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="terms_conditions.html">Terms & conditions</a>
+                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Lunch">Lunch</a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="help_support.html">Help & support</a>
+                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Dinner">Dinner</a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="help_ticket.html">Help ticket</a>
-                    </li>
-                    <li><a class="dropdown-item" href="signin.html">Logout</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#"><i class="icofont-page mr-2"></i> Pages</a>
-                <ul>
-                    <li>
-                        <a class="dropdown-item" href="verification.html">Verification</a>
-                    </li>
-                    <li><a class="dropdown-item" href="promos.html">Promos</a></li>
-                    <li>
-                        <a class="dropdown-item" href="promo_details.html">Promo Details</a>
+                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Appetizer & Snack">Appetizer & Snack</a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="terms_conditions.html">Terms & Conditions</a>
-                    </li>
-                    <li><a class="dropdown-item" href="privacy.html">Privacy</a></li>
-                    <li>
-                        <a class="dropdown-item" href="terms%26conditions.html">Conditions</a>
+                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Dessert">Dessert</a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="help_support.html">Help Support</a>
+                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Drink">Drink</a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="help_ticket.html">Help Ticket</a>
+                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Salade">Salade</a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="refund_payment.html">Refund Payment</a>
-                    </li>
-                    <li><a class="dropdown-item" href="faq.html">FAQ</a></li>
-                    <li><a class="dropdown-item" href="signin.html">Sign In</a></li>
-                    <li><a class="dropdown-item" href="signup.html">Sign Up</a></li>
-                    <li><a class="dropdown-item" href="search.html">Search</a></li>
-                </ul>
-            </li>
-            <li>
-                <a href="#"><i class="icofont-link mr-2"></i> Navigation Link Example</a>
-                <ul>
-                    <li>
-                        <a href="#">Link Example 1</a>
-                        <ul>
-                            <li>
-                                <a href="#">Link Example 1.1</a>
-                                <ul>
-                                    <li><a href="#">Link</a></li>
-                                    <li><a href="#">Link</a></li>
-                                    <li><a href="#">Link</a></li>
-                                    <li><a href="#">Link</a></li>
-                                    <li><a href="#">Link</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <a href="#">Link Example 1.2</a>
-                                <ul>
-                                    <li><a href="#">Link</a></li>
-                                    <li><a href="#">Link</a></li>
-                                    <li><a href="#">Link</a></li>
-                                    <li><a href="#">Link</a></li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a href="#">Link Example 2</a></li>
-                    <li><a href="#">Link Example 3</a></li>
-                    <li><a href="#">Link Example 4</a></li>
-                    <li data-nav-custom-content>
-                        <div class="custom-message">
-                            You can add any custom content to your navigation items. This
-                            text is just an example.
-                        </div>
+                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Soup">Soup</a>
                     </li>
                 </ul>
             </li>
-        </ul>
-        <ul class="bottom-nav">
-            <li class="email">
-                <a class="text-success" href="home.html">
-                    <p class="h5 m-0"><i class="icofont-home text-success"></i></p>
-                    Home
-                </a>
-            </li>
-            <li class="github">
-                <a href="cart.html">
-                    <p class="h5 m-0"><i class="icofont-cart"></i></p>
-                    CART
-                </a>
-            </li>
-            <li class="ko-fi">
-                <a href="help_ticket.html">
-                    <p class="h5 m-0"><i class="icofont-headphone"></i></p>
-                    Help
-                </a>
-            </li>
+            <li><a class="dropdown-item" href="#">Ingredients</a></li>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <li>
+                    <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button id="logout" type="submit" class="nav-link btn btn-link text-success m-0 p-0"><i class="icofont-logout mr-2"></i>Logout</button>
+                    </form>
+                </li>
+            }
         </ul>
     </nav>
 
@@ -319,7 +373,9 @@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="~/lib/slick/slick.min.js"></script>
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
     <script src="~/lib/sidebar/hc-offcanvas-nav.js"></script>
     <script src="~/js/osahan.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
