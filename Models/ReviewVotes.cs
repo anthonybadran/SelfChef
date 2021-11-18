@@ -16,7 +16,7 @@ namespace SelfChef.Models
 
         [Key]
         [Display(Name = "Author")]
-        public int AuthorID { get; set; }
+        public string AuthorID { get; set; }
 
         [Required]
         [Display(Name = "Vote")]

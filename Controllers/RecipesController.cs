@@ -116,9 +116,45 @@ namespace SelfChef.Controllers
             }
             else
             {
+                var reviews = _context.RecipeReviews.Where(r => r.RecipeID == id).ToList();
+                int sumRatings = 0;
+                double sumReviews = 0;
+                int avgRatings = 0;
+                ViewBag.sumReviews = sumReviews;
+                foreach (var review in reviews)
+                {
+                    sumRatings += review.Rating;
+                }
+                if (reviews.Count() != 0)
+                {
+                    avgRatings = sumRatings / reviews.Count();
+                    ViewBag.sumReviews = reviews.Count();
+                }
+                ViewBag.avgRatings = avgRatings;
                 var recipe = _context.Recipes.Find(id);
                 return View(recipe);
             }
+        }
+
+        public IActionResult ReviewsSummary(int id)
+        {
+            var reviews = _context.RecipeReviews.Where(r => r.RecipeID == id).ToList();
+            int sumRatings = 0;
+            double sumReviews = 0;
+            int avgRatings = 0;
+            ViewBag.sumReviews = sumReviews;
+            foreach (var review in reviews)
+            {
+                sumRatings += review.Rating;
+            }
+            if (reviews.Count() != 0)
+            {
+                avgRatings = sumRatings / reviews.Count();
+                ViewBag.sumReviews = reviews.Count();
+            }
+            ViewBag.avgRatings = avgRatings;
+            var recipe = _context.Recipes.Find(id);
+            return View(recipe);
         }
     }
 }

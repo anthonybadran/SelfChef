@@ -11,6 +11,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Recipes\AddOrEdit.cshtml" />
+    <None Include="Views\Recipes\Details.cshtml" />
+    <None Include="Views\Recipes\ReviewsSummary.cshtml" />
+    <None Include="Views\Reviews\AddOrEdit.cshtml" />
+    <None Include="Views\Reviews\ViewReviews.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.19" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.19" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.19" />

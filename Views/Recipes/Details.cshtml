@@ -1,4 +1,9 @@
 ﻿@model SelfChef.Models.Recipes
+@using Microsoft.AspNetCore.Identity
+@using SelfChef.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
 @{
     ViewData["Title"] = "Details";
     string[] ingredients = Model.Ingredients.Split(Environment.NewLine,
@@ -19,29 +24,18 @@
     }
 
     int i = 1;
+
+    @*int avgRatings = Int32.Parse(ViewBag.avgRatings);
+        int sumReviews = Int32.Parse(ViewBag.sumReviews);*@
 }
 
+<input id="recipe-id" type="hidden" value="@Model.RecipeID" />
 <div class="row mt-3">
     <div class="col-lg-7">
         <div class="p-4 bg-white rounded shadow-sm mb-3">
             <div class="pt-0">
                 <h1 class="font-weight-bold">@Model.Title</h1>
-                <a href="review.html">
-                    <div class="rating-wrap d-flex align-items-center mt-2">
-                        <ul class="rating-stars list-unstyled">
-                            <li>
-                                <i class="icofont-star text-warning"></i>
-                                <i class="icofont-star text-warning"></i>
-                                <i class="icofont-star text-warning"></i>
-                                <i class="icofont-star text-warning"></i>
-                                <i class="icofont-star"></i>
-                            </li>
-                        </ul>
-                        <p class="label-rating text-muted ml-2 small">
-                            (245 Reviews)
-                        </p>
-                    </div>
-                </a>
+                <div id="reviews-summary" class="rating-wrap d-flex align-items-center mt-2"></div>
             </div>
             <div class="details">
                 <div class="pt-3">
@@ -85,47 +79,126 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-3">
-        <div class="p-4 bg-white rounded shadow-sm mb-3" style="font-size: 1rem">
-            <div class="mb-4">
-                <strong>Prep. Time: </strong><span>@Model.PrepTime</span> mins
+    <div class="col">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="p-4 bg-white rounded shadow-sm mb-3" style="font-size: 1rem">
+                    <div class="mb-4">
+                        <strong>Prep. Time: </strong><span>@Model.PrepTime</span> mins
+                    </div>
+                    <div class="mb-4">
+                        <strong>Cook Time: </strong><span>@Model.CookTime</span> mins
+                    </div>
+                    <div class="mb-4">
+                        <strong>Total Time: </strong><span>@(Model.CookTime + Model.PrepTime)</span> mins
+                    </div>
+                    <div>
+                        <strong>Servings: </strong><span>@Model.Servings</span>
+                    </div>
+                </div>
             </div>
-            <div class="mb-4">
-                <strong>Cook Time: </strong><span>@Model.CookTime</span> mins
-            </div>
-            <div class="mb-4">
-                <strong>Total Time: </strong><span>@(Model.CookTime + Model.PrepTime)</span> mins
-            </div>
-            <div>
-                <strong>Servings: </strong><span>@Model.Servings</span>
+            @if (Model.Category != null || Model.Cuisine != null)
+            {
+                <div class="col-lg-6">
+                    <div class="p-4 bg-white rounded shadow-sm mb-3" style="font-size: 1rem">
+                        @if (Model.Category != null)
+                        {
+                            <div class="mb-4">
+                                <strong>Category: </strong>
+                                @foreach (string category in categories)
+                                {
+                                    <span class="badge badge-secondary">@category</span>
+                                }
+                            </div>
+                        }
+                        @if (Model.Cuisine != null)
+                        {
+                            <div class="mb-4">
+                                <strong>Cuisine: </strong>
+                                @foreach (string cuisine in cuisines)
+                                {
+                                    <span class="badge badge-secondary">@cuisine</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="p-4 bg-white rounded shadow-sm mb-3">
+                    <div class="pt-0">
+                        <h4 class="font-weight-bold">Reviews</h4>
+                    </div>
+                    <div class="details">
+                        <div class="pt-3">
+                            @if (SignInManager.IsSignedIn(User))
+                            {
+                                <div class="row mb-2">
+                                    <div class="col">
+                                        <button onclick="showInPopup('@Url.Action("AddOrEdit","Reviews", new {recipe=Model.RecipeID}, Context.Request.Scheme)','Add Review')" class="btn btn-sm btn-outline-primary float-right">Add Review</button>
+                                    </div>
+                                </div>
+                            }
+                            <div class="row">
+                                <div id="all-reviews" class="col"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    @if (Model.Category != null || Model.Cuisine != null)
-    {
-        <div class="col-lg-3">
-            <div class="p-4 bg-white rounded shadow-sm mb-3" style="font-size: 1rem">
-                @if (Model.Category != null)
-                {
-                    <div class="mb-4">
-                        <strong>Category: </strong>
-                        @foreach (string category in categories)
-                        {
-                            <span class="badge badge-secondary">@category</span>
-                        }
-                    </div>
-                }
-                @if (Model.Cuisine.Length != null)
-                {
-                    <div class="mb-4">
-                        <strong>Cuisine: </strong>
-                        @foreach (string cuisine in cuisines)
-                        {
-                            <span class="badge badge-secondary">@cuisine</span>
-                        }
-                    </div>
-                }
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" id="form-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
             </div>
         </div>
-    }
+    </div>
 </div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script>
+                // Example starter JavaScript for disabling form submissions if there are invalid fields
+                (function () {
+                    'use strict';
+                    window.addEventListener('load', function () {
+                        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                        var forms = document.getElementsByClassName('needs-validation');
+                        // Loop over them and prevent submission
+                        var validation = Array.prototype.filter.call(forms, function (form) {
+                            form.addEventListener('submit', function (event) {
+                                if (form.checkValidity() === false) {
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                }
+                                form.classList.add('was-validated');
+                            }, false);
+                        });
+                    }, false);
+                })();
+
+                $(document).ready(function () {
+                    var url = '@Url.Action("ViewReviews", "Reviews")/' + '@Model.RecipeID';
+                    $.ajax({
+                        type: 'GET',
+                        url: url,
+                        success: function (res) {
+                            $('#all-reviews').html(res);
+                        }
+                    })
+                });
+    </script>
+    <script src="~/js/reviews.js"></script>
+}

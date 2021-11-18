@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SelfChef.Data;
 
 namespace SelfChef.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211118100012_DropReviewVotes")]
+    partial class DropReviewVotes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -409,23 +411,6 @@ namespace SelfChef.Migrations
                     b.HasKey("RecipeID");
 
                     b.ToTable("Recipes");
-                });
-
-            modelBuilder.Entity("SelfChef.Models.ReviewVotes", b =>
-                {
-                    b.Property<int>("ReviewID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AuthorID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Vote")
-                        .HasColumnType("int");
-
-                    b.HasKey("ReviewID", "AuthorID")
-                        .HasName("Review_Votes_PK");
-
-                    b.ToTable("Review_Votes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

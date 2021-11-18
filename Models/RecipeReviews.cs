@@ -21,7 +21,7 @@ namespace SelfChef.Models
 
         [Required]
         [Display(Name = "Author")]
-        public int AuthorID { get; set; }
+        public string AuthorID { get; set; }
 
         [Required]
         [Display(Name = "Rating")]
@@ -31,8 +31,7 @@ namespace SelfChef.Models
         public string Description { get; set; }
 
         public string Picture { get; set; }
-
-        [DataType(DataType.Date)]
+        
         [Display(Name = "Modified Date")]
         public DateTime? ModifiedDate { get; set; }
     }

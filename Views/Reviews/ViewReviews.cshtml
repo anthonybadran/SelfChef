@@ -1,0 +1,84 @@
+﻿@model SelfChef.ViewModels.ReviewsViewModel
+@using Microsoft.AspNetCore.Identity
+@using SelfChef.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{ 
+    Layout = null;
+    var currentUser = await UserManager.GetUserAsync(User);
+}
+
+@foreach (var review in Model.Reviews)
+{
+    var user = Model.Users.Where(u => u.Id == review.AuthorID).FirstOrDefault();
+    int nbVotes = Model.ReviewVotes.Where(v => v.ReviewID == review.ReviewID).ToList().Count();
+    @if (user != null)
+    {
+        <hr />
+        <div class="mt-2">
+            <div class="row">
+                <div class="col-10">
+                    <h6 class="mb-3">Author: @user.FirstName @user.LastName</h6>
+                </div>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    @if (currentUser.Id == user.Id)
+                    {
+                        <div class="col-2">
+                            <div class="dropdown float-right">
+                                <a class="btn btn-link p-0" href="javascript:void(0)" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="font-weight-bold">&#8942;</span>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    <li><button class="dropdown-item" onclick="showInPopup('@Url.Action("AddOrEdit","Reviews",new {id=review.ReviewID, recipe=review.RecipeID},Context.Request.Scheme)','Edit Review')">Edit</button></li>
+                                    <li><button class="dropdown-item" onclick="jQueryAjaxDelete('@(review.ReviewID.ToString())')">Delete</button></li>
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <div class="rating-wrap d-flex align-items-center mt-2">
+                <ul class="rating-stars list-unstyled">
+                    <li>
+                        @for (int i = 0; i < review.Rating; i++)
+                        {
+                            <i class="icofont-star text-warning"></i>
+                        }
+                        @for (int i = 0; i < (5 - review.Rating); i++)
+                        {
+                            <i class="icofont-star"></i>
+                        }
+                    </li>
+                </ul>
+            </div>
+            <p>@review.Description</p>
+            <p>
+                <small class="text-muted">Modified on @review.ModifiedDate.Value.ToString("dd/MM/yyyy hh:mm:ss")</small>
+
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    @if (Model.ReviewVotes.Where(v => v.AuthorID == currentUser.Id && v.ReviewID == review.ReviewID).FirstOrDefault() != null)
+                    {
+                        <a href="javascript:helpful('@Url.Action("Helpful","Reviews", new {id=review.ReviewID, user=currentUser.Id, recipe=review.RecipeID}, Context.Request.Scheme)')" class="text-dark">
+                            <span class="float-right"><i class="icofont-thumbs-up h5 pr-1 text-success"></i>Helpful <small class="text-muted">(@nbVotes)</small></span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="javascript:helpful('@Url.Action("Helpful","Reviews", new {id=review.ReviewID, user=currentUser.Id, recipe=review.RecipeID}, Context.Request.Scheme)')" class="text-dark">
+                            <span class="float-right"><i class="icofont-thumbs-up h5 pr-1"></i>Helpful <small class="text-muted">(@nbVotes)</small></span>
+                        </a>
+                    }
+                }
+                else
+                {
+                    <a href="/Identity/Account/Login?ReturnUrl=/Recipes/Details/@review.RecipeID" class="text-dark">
+                        <span class="float-right"><i class="icofont-thumbs-up h5 pr-1"></i>Helpful <small class="text-muted">(@nbVotes)</small></span>
+                    </a>
+                }
+            </p>
+        </div>
+    }
+}
