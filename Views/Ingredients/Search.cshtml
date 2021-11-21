@@ -1,0 +1,110 @@
+﻿@model IEnumerable<SelfChef.Models.Recipes>
+
+@{
+    ViewData["Title"] = "Ingredients";
+}
+
+<div class="row">
+    <div class="col-3">
+        <div class="pt-5 sticky-top" style="top: 30px">
+            <div class="shadow bg-white p-4 rounded">
+                <div class="px-2">
+                    <h3>Filter</h3>
+                    <form method="post" enctype="multipart/form-data" asp-controller="Ingredients" asp-action="Search" class="needs-validation" novalidate>
+                        <div class="row">
+                            <div class="col mt-4">
+                                <label class="control-label">Recipe or Keyword</label>
+                                <input id="term" name="term" value="@ViewBag.term" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mt-4">
+                                <label class="control-label" for="include">Included Ingredients</label>
+                                <input id="include" name="include" value="@ViewBag.include" class="form-control" data-role="tagsinput" />
+                                <span class="help-block text-muted small">Press 'Enter' after each ingredient.</span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col mt-4">
+                                <label class="control-label" for="exclude">Excluded Ingredients</label>
+                                <input id="exclude" name="exclude" value="@ViewBag.exclude" class="form-control" data-role="tagsinput" />
+                                <span class="help-block text-muted small">Press 'Enter' after each ingredient.</span>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col text-center">
+                                <div class="form-group">
+                                    <a class="btn btn-secondary d mr-2" asp-controller="Home" asp-action="Index">Cancel</a>
+                                    <button id="submit-all" type="submit" class="btn btn-success">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col mt-5">
+        <div class="row">
+            @foreach (var recipe in Model)
+            {
+                <div class="col-12 col-md-4 mb-3">
+                    <a asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.RecipeID"
+                       class="text-dark text-decoration-none">
+                        <div class="
+                        list-card
+                        bg-white
+                        h-100
+                        rounded
+                        overflow-hidden
+                        position-relative
+                        shadow-sm
+                      ">
+                            <div class="rounded m-0">
+                                <div class="m-2 rounded" style="overflow: hidden; height: 200px;">
+                                    @if (recipe.Picture != null)
+                                    {
+                                        <img src="@("/img/recipes/"+recipe.PictureName)"
+                                             class="img-fluid mx-auto rounded"
+                                             alt="Recipe image" style="min-width: 100%; min-height: 100%;" />
+                                    }
+                                    else
+                                    {
+                                        <img src="~/img/orange-background.jpg"
+                                             class="img-fluid mx-auto rounded"
+                                             alt="Recipe image" style="min-width: 100%; min-height: 100%;" />
+                                    }
+                                </div>
+                            </div>
+                            <div class="p-3 position-relative">
+                                <h6 class="mb-1 font-weight-bold text-success">
+                                    @recipe.Title
+                                </h6>
+                                <p class="text-muted">
+                                    @if (recipe.Description.Length > 30)
+                                    {
+                                        @(recipe.Description.Substring(0, 30))<span>...</span>
+                                    }
+                                    else
+                                    {
+                                        @recipe.Description
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            }
+            @if (Model.Count() == 0)
+            {
+                <div class="col center-block text-center align-self-center" style="margin-top: 15%">
+                    <h4 class="text-secondary">Sorry, No Results Found :(</h4>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

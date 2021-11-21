@@ -75,3 +75,8 @@ body {
         padding-top: 57px;
     }
 }
+
+.nav-pills > li > a.active {
+    background-color: #EB563B !important;
+    color: white !important;
+}
