@@ -14,8 +14,8 @@
             Hello, @firstName!
         </a>
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="min-width: 0px">
-            <li><a class="dropdown-item" asp-controller="Favorites" asp-action="Index" asp-route-user="@user.Id">Favorites</a></li>
-            <li><a class="dropdown-item" asp-controller="Recipes" asp-action="MyRecipes" asp-route-user="@user.Id">My Recipes</a></li>
+            <li><a class="dropdown-item" asp-area="" asp-controller="Favorites" asp-action="Index" asp-route-user="@user.Id">Favorites</a></li>
+            <li><a class="dropdown-item" asp-area="" asp-controller="Recipes" asp-action="MyRecipes" asp-route-user="@user.Id">My Recipes</a></li>
             <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">Manage Account</a></li>
         </ul>
     </div>

@@ -29,13 +29,23 @@
         int sumReviews = Int32.Parse(ViewBag.sumReviews);*@
 }
 
+@section Head {
+    <link rel="stylesheet" media="print" href="~/css/print.css" />
+}
+
 <input id="recipe-id" type="hidden" value="@Model.RecipeID" />
 <div class="row mt-3">
     <div class="col-lg-7">
         <div class="p-4 bg-white rounded shadow-sm mb-3">
             <div class="pt-0">
-                <h1 class="font-weight-bold">@Model.Title</h1>
-                <div id="reviews-summary" class="rating-wrap d-flex align-items-center mt-2"></div>
+                <div class="row">
+                    <div class="col-8">
+                        <h1 class="font-weight-bold">@Model.Title</h1>
+                    </div>
+                    <div id="favorite" class="noPrint col-4"></div>
+                </div>
+
+                <div id="reviews-summary" class="noPrint rating-wrap d-flex align-items-center mt-2"></div>
             </div>
             <div class="details">
                 <div class="pt-3">
@@ -125,7 +135,7 @@
                 </div>
             }
         </div>
-        <div class="row">
+        <div class="row noPrint">
             <div class="col">
                 <div class="p-4 bg-white rounded shadow-sm mb-3">
                     <div class="pt-0">
@@ -169,6 +179,8 @@
 
 @section Scripts {
     @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script src="~/js/reviews.js"></script>
+    <script src="~/js/favorites.js"></script>
     <script>
                 // Example starter JavaScript for disabling form submissions if there are invalid fields
                 (function () {
@@ -198,7 +210,8 @@
                             $('#all-reviews').html(res);
                         }
                     })
+
+                    getFavorite();
                 });
     </script>
-    <script src="~/js/reviews.js"></script>
 }

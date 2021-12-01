@@ -62,13 +62,14 @@ namespace SelfChef.Controllers
             {
                 recipe.Cuisine += cuisine + Environment.NewLine;
             }
-            recipe.Author = user.UserName;
+            recipe.Author = user.Id;
             recipe.ModifiedDate = @DateTime.Now;
             if (recipe.Picture != null)
             {
                 var pathSplit = recipe.Picture.Split("recipes/");
                 recipe.PictureName = pathSplit[1];
             }
+            recipe.Status = "Pending";
             if (id == 0)
             {
                 _context.Add(recipe);
@@ -77,6 +78,10 @@ namespace SelfChef.Controllers
             }
             else
             {
+                if (user.Id != recipe.Author)
+                {
+                    return NotFound();
+                }
                 _context.Update(recipe);
                 _context.SaveChanges();
                 return RedirectToAction(nameof(Index), "Home");
@@ -97,7 +102,7 @@ namespace SelfChef.Controllers
             return Json(path);
         }
 
-        public IActionResult DeleteImage(string path)
+        public IActionResult DeleteImage(int? recipeId, string path)
         {
             if (System.IO.File.Exists(path))
             {
@@ -155,6 +160,33 @@ namespace SelfChef.Controllers
             ViewBag.avgRatings = avgRatings;
             var recipe = _context.Recipes.Find(id);
             return View(recipe);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> MyRecipes(string user)
+        {
+            var currentUser = await _manager.GetUserAsync(HttpContext.User);
+            if (currentUser.Id != user)
+            {
+                return NotFound();
+            }
+            ViewBag.user = user;
+            return View(_context.Recipes.Where(r => r.Author == user).ToList());
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var user = await _manager.GetUserAsync(HttpContext.User);
+            var recipe = await _context.Recipes.FindAsync(id);
+            if (user.Id != recipe.Author)
+            {
+                return Json("Not Allowed");
+            }
+            _context.Recipes.Remove(recipe);
+            _context.SaveChanges();
+            return Json("Recipe successfully deleted.");
+
         }
     }
 }

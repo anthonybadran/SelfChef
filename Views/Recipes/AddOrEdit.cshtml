@@ -2,6 +2,40 @@
 @{
     ViewData["Title"] = "Recipe";
     Layout = null;
+    List<string> defaultCategories = new List<string>()
+    {
+        "Breakfast",
+        "Lunch",
+        "Dinner",
+        "Appetizer & Snack",
+        "Dessert",
+        "Drink",
+        "Salade",
+        "Soup"
+    };
+    List<string> defaultCuisines = new List<string>()
+    {
+        "Asian",
+        "International",
+        "Italian",
+        "Mexican",
+        "Middle Eastern"
+    };
+    string[] categories = new string[] { "" };
+    string[] cuisines = new string[] { "" };
+    if (ViewBag.edit == 1)
+    {
+        if (Model.Category != null)
+        {
+            categories = Model.Category.Split(Environment.NewLine,
+                                StringSplitOptions.RemoveEmptyEntries);
+        }
+        if (Model.Cuisine != null)
+        {
+            cuisines = Model.Cuisine.Split(Environment.NewLine,
+                                StringSplitOptions.RemoveEmptyEntries);
+        }
+    }
 }
 
 <!DOCTYPE html>
@@ -119,7 +153,9 @@
                                     <h3>Submit a Recipe</h3>
                                     <form method="post" enctype="multipart/form-data" asp-controller="Recipes" asp-action="AddOrEdit" class="needs-validation" novalidate>
                                         <div asp-validation-summary="ModelOnly" class="form-group text-danger"></div>
+                                        <input type="hidden" id="recipe-id" asp-for="RecipeID" />
                                         <input type="hidden" id="picture-path" asp-for="Picture" />
+                                        <input type="hidden" id="picture-name" asp-for="PictureName" />
                                         <div class="row">
                                             <div class="col-sm-8">
                                                 <div class="row">
@@ -184,14 +220,24 @@
                                             <div class="col-sm-8 mt-3">
                                                 <label for="categories" class="control-label">Category</label>
                                                 <select id="categories" class="js-example-basic-multiple custom-select select2" name="categories" multiple="multiple">
-                                                    <option value="Breakfast">Breakfast</option>
-                                                    <option value="Lunch">Lunch</option>
-                                                    <option value="Dinner">Dinner</option>
-                                                    <option value="Appetizer & Snack">Alabama</option>
-                                                    <option value="Dessert">Dessert</option>
-                                                    <option value="Drink">Drink</option>
-                                                    <option value="Salade">Salade</option>
-                                                    <option value="Soup">Soup</option>
+                                                    @foreach (var category in defaultCategories)
+                                                    {
+                                                        if (Model.Cuisine != null)
+                                                        {
+                                                            if (Model.Category.Contains(category))
+                                                            {
+                                                                <option value="@category" selected>@category</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@category">@category</option>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@category">@category</option>
+                                                        }
+                                                    }
                                                 </select>
                                             </div>
                                         </div>
@@ -199,18 +245,31 @@
                                             <div class="col-sm-8 mt-3">
                                                 <label for="cuisines" class="control-label">Cuisine</label>
                                                 <select id="cuisines" class="js-example-basic-multiple custom-select select2" name="cuisines" multiple="multiple">
-                                                    <option value="Asian">Asian</option>
-                                                    <option value="International">International</option>
-                                                    <option value="Italien">Italien</option>
-                                                    <option value="Mexican">Mexican</option>
-                                                    <option value="Middle Eastern">Middle Eastern</option>
+                                                    @foreach (var cuisine in defaultCuisines)
+                                                    {
+                                                        if (Model.Cuisine != null)
+                                                        {
+                                                            if (Model.Cuisine.Contains(cuisine))
+                                                            {
+                                                                <option value="@cuisine" selected>@cuisine</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@cuisine">@cuisine</option>
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@cuisine">@cuisine</option>
+                                                        }
+                                                    }
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="row mt-3">
                                             <div class="col">
                                                 <div class="form-check">
-                                                    <input asp-for="Private" class="form-check-input" type="checkbox" value="" id="private">
+                                                    <input asp-for="Private" class="form-check-input" type="checkbox" id="private">
                                                     <label class="form-check-label" for="private">
                                                         Private Recipe (Only you can see it)
                                                     </label>
@@ -292,9 +351,11 @@
 
                         // Remove the file preview.
                         wrapperThis.removeFile(file);
+                        $("#picture-path").val(null);
+                        $("#picture-name").val(null);
                         // If you want to the delete the file on the server as well,
                         // you can do the AJAX request here.
-                        $.ajax({
+                        @*$.ajax({
                             type: "POST",
                             url: "/Recipes/DeleteImage",
                             data: {
@@ -306,7 +367,7 @@
                             error: function (err) {
                                 console.log(err);
                             }
-                        });
+                        });*@
                     });
                     // Add the button to the file preview element.
                     file.previewElement.appendChild(removeButton);
@@ -329,6 +390,22 @@
                     });
                     this.addFile(file);
                 });
+
+                if ($("#picture-name").val() != '') {
+                    var mockFile = {
+                        name: $("#picture-name").val()
+                    };
+                    var path = "/img/recipes/" + $("#picture-name").val();
+                    let callback = null; // Optional callback when it's done
+                    let crossOrigin = null; // Added to the `img` tag for crossOrigin handling
+                    let resizeThumbnail = false; // Tells Dropzone whether it should resize the image first
+                    this.displayExistingFile(mockFile, path, callback, crossOrigin, resizeThumbnail);
+
+                    // If you use the maxFiles option, make sure you adjust it to the
+                    // correct amount:
+                    let fileCountOnServer = 1; // The number of files already uploaded
+                    this.options.maxFiles = this.options.maxFiles - fileCountOnServer;
+                }
             }
         };
 

@@ -31,7 +31,7 @@
         <div class="border-bottom p-3 d-none mobile-nav">
             <div class="row title d-flex align-items-center">
                 <div class="col-6">
-                    <a asp-controller="Home" asp-action="Index" class="text-decoration-none text-dark">
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="text-decoration-none text-dark">
                         <img class="mr-2" style="width: 40%" src="~/img/logo.png" />
                     </a>
                 </div>
@@ -42,7 +42,7 @@
                 </div>
             </div>
             <a href="#" class="text-decoration-none">
-                <form asp-controller="Home" asp-action="Index">
+                <form asp-area="" asp-controller="Home" asp-action="Index">
                     <div class="input-group mt-3 rounded shadow-sm overflow-hidden bg-white">
                         <div class="input-group-prepend">
                             <button type="submit" value="Filter" class="border-0 btn btn-outline-secondary text-success bg-white">
@@ -71,7 +71,7 @@
             <nav class="navbar navbar-expand-lg navbar-light bg-white osahan-header py-0 fixed-top shadow-sm">
                 <div class="container">
                     <div class="d-flex align-items-start" style="width:25%">
-                        <a asp-controller="Home" asp-action="Index" class="mr-auto navbar-brand mr-0">
+                        <a asp-area="" asp-controller="Home" asp-action="Index" class="mr-auto navbar-brand mr-0">
                             <img class="ml-auto img-fluid logo-img" src="~/img/logo.png" />
                         </a>
                     </div>
@@ -85,7 +85,7 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <div class="mx-auto my-2 d-flex align-items-center">
-                        <form asp-controller="Home" asp-action="Index">
+                        <form asp-area="" asp-controller="Home" asp-action="Index">
                             <div class="input-group mr-sm-2 col-lg-12" style="width: 35em">
                                 <input type="text" name="SearchString"
                                        class="form-control"
@@ -109,10 +109,10 @@
                 <div class="container menu-bar d-flex align-items-center">
                     <ul class="list-unstyled form-inline mb-0">
                         <li class="nav-item active">
-                            <a class="nav-link text-white pl-0" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-white pl-0" asp-area="" asp-controller="Home" asp-action="Index" asp-route-id="">Home</a>
                         </li>
                         <li>
-                            <a class="nav-link text-white" href="#">Popular Recipes</a>
+                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index" asp-route-id="Popular">Popular Recipes</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link text-white dropdown-toggle"
@@ -128,73 +128,73 @@
                                 @{
                                     if (ViewBag.Category == "Breakfast")
                                     {
-                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-category="Breakfast">Breakfast</a>
+                                        <a class="dropdown-item active" asp-area="" asp-controller="Home" asp-action="Index" asp-route-category="Breakfast">Breakfast</a>
                                     }
                                     else
                                     {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Breakfast">Breakfast</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" asp-route-category="Breakfast">Breakfast</a>
                                     }
                                     if (ViewBag.Category == "Lunch")
                                     {
-                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-category="Lunch">Lunch</a>
+                                        <a class="dropdown-item active" asp-area="" asp-controller="Home" asp-action="Index" asp-route-category="Lunch">Lunch</a>
                                     }
                                     else
                                     {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Lunch">Lunch</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" asp-route-category="Lunch">Lunch</a>
                                     }
                                     if (ViewBag.Category == "Dinner")
                                     {
-                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-category="Dinner">Dinner</a>
+                                        <a class="dropdown-item active" asp-area="" asp-controller="Home" asp-action="Index" asp-route-category="Dinner">Dinner</a>
                                     }
                                     else
                                     {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Dinner">Dinner</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" asp-route-category="Dinner">Dinner</a>
                                     }
                                     if (ViewBag.Category == "Appetizer & Snack")
                                     {
-                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-category="Appetizer & Snack">Appetizer & Snack</a>
+                                        <a class="dropdown-item active" asp-area="" asp-controller="Home" asp-action="Index" asp-route-category="Appetizer & Snack">Appetizer & Snack</a>
                                     }
                                     else
                                     {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Appetizer & Snack">Appetizer & Snack</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" asp-route-category="Appetizer & Snack">Appetizer & Snack</a>
                                     }
                                     if (ViewBag.Category == "Dessert")
                                     {
-                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-category="Dessert">Dessert</a>
+                                        <a class="dropdown-item active" asp-area="" asp-controller="Home" asp-action="Index" asp-route-category="Dessert">Dessert</a>
                                     }
                                     else
                                     {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Dessert">Dessert</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" asp-route-category="Dessert">Dessert</a>
                                     }
                                     if (ViewBag.Category == "Drink")
                                     {
-                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-category="Drink">Drink</a>
+                                        <a class="dropdown-item active" asp-area="" asp-controller="Home" asp-action="Index" asp-route-category="Drink">Drink</a>
                                     }
                                     else
                                     {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Drink">Drink</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" asp-route-category="Drink">Drink</a>
                                     }
                                     if (ViewBag.Category == "Salade")
                                     {
-                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-category="Salade">Salade</a>
+                                        <a class="dropdown-item active" asp-area="" asp-controller="Home" asp-action="Index" asp-route-category="Salade">Salade</a>
                                     }
                                     else
                                     {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Salade">Salade</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" asp-route-category="Salade">Salade</a>
                                     }
                                     if (ViewBag.Category == "Soup")
                                     {
-                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-category="Soup">Soup</a>
+                                        <a class="dropdown-item active" asp-area="" asp-controller="Home" asp-action="Index" asp-route-category="Soup">Soup</a>
                                     }
                                     else
                                     {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-category="Soup">Soup</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" asp-route-category="Soup">Soup</a>
                                     }
                                 }
                             </div>
                         </li>
                         <li>
-                            <a class="nav-link text-white" asp-controller="Ingredients" asp-action="Index">Ingredients</a>
+                            <a class="nav-link text-white" asp-area="" asp-controller="Ingredients" asp-action="Index">Ingredients</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link text-white dropdown-toggle"
@@ -210,43 +210,43 @@
                                 @{
                                     if (ViewBag.Cuisine == "Asian")
                                     {
-                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-cuisine="Asian">Asian</a>
+                                        <a class="dropdown-item active" asp-area="" asp-controller="Home" asp-action="Index" asp-route-cuisine="Asian">Asian</a>
                                     }
                                     else
                                     {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-cuisine="Asian">Asian</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" asp-route-cuisine="Asian">Asian</a>
                                     }
                                     if (ViewBag.Cuisine == "International")
                                     {
-                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-cuisine="International">International</a>
+                                        <a class="dropdown-item active" asp-area="" asp-controller="Home" asp-action="Index" asp-route-cuisine="International">International</a>
                                     }
                                     else
                                     {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-cuisine="International">International</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" asp-route-cuisine="International">International</a>
                                     }
                                     if (ViewBag.Cuisine == "Italian")
                                     {
-                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-cuisine="Italian">Italian</a>
+                                        <a class="dropdown-item active" asp-area="" asp-controller="Home" asp-action="Index" asp-route-cuisine="Italian">Italian</a>
                                     }
                                     else
                                     {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-cuisine="Italian">Italian</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" asp-route-cuisine="Italian">Italian</a>
                                     }
                                     if (ViewBag.Cuisine == "Mexican")
                                     {
-                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-cuisine="Mexican">Mexican</a>
+                                        <a class="dropdown-item active" asp-area="" asp-controller="Home" asp-action="Index" asp-route-cuisine="Mexican">Mexican</a>
                                     }
                                     else
                                     {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-cuisine="Mexican">Mexican</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" asp-route-cuisine="Mexican">Mexican</a>
                                     }
                                     if (ViewBag.Cuisine == "Middle Eastern")
                                     {
-                                        <a class="dropdown-item active" asp-controller="Home" asp-action="Index" asp-route-cuisine="Middle Eastern">Middle Eastern</a>
+                                        <a class="dropdown-item active" asp-area="" asp-controller="Home" asp-action="Index" asp-route-cuisine="Middle Eastern">Middle Eastern</a>
                                     }
                                     else
                                     {
-                                        <a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-cuisine="Middle Eastern">Middle Eastern</a>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Home" asp-action="Index" asp-route-cuisine="Middle Eastern">Middle Eastern</a>
                                     }
                                 }
                             </div>
@@ -255,7 +255,11 @@
                     @if (SignInManager.IsSignedIn(User))
                     {
                         <div class="list-unstyled form-inline mb-0 ml-auto">
-                            <a asp-controller="Recipes" asp-action="AddOrEdit" class="text-white bg-offer px-3 py-2"><i class="icofont-plus"></i> Add Recipe</a>
+                            <a asp-area="" asp-controller="Recipes" asp-action="AddOrEdit" class="text-white bg-offer px-3 py-2"><i class="icofont-plus"></i> Add Recipe</a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a class="text-white bg-success px-3 py-2" asp-area="Admin" asp-controller="Pending" asp-action="Index"><i class="icofont-hammer-alt mr-1"></i>Admin</a>
+                            }
                         </div>
                     }
                 </div>
@@ -266,7 +270,7 @@
                     <div class="container">
                         <ol class="d-flex align-items-center mb-0 p-0">
                             <li class="breadcrumb-item">
-                                <a asp-controller="Home" asp-action="Index" class="text-success">Home</a>
+                                <a asp-area="" asp-controller="Home" asp-action="Index" class="text-success">Home</a>
                             </li>
                             @if (ViewBag.category != null)
                             {
@@ -324,9 +328,9 @@
                 </li>
             }
             <li>
-                <a asp-controller="Home" asp-action="Index">Home</a>
+                <a asp-controller="Home" asp-action="Index" asp-route-id="">Home</a>
             </li>
-            <li><a class="dropdown-item" href="#">Popular Recipes</a></li>
+            <li><a class="dropdown-item" asp-controller="Home" asp-action="Index" asp-route-id="Popular">Popular Recipes</a></li>
             <li>
                 <a href="#">Category</a>
                 <ul>

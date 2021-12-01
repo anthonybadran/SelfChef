@@ -1,0 +1,80 @@
+﻿@model SelfChef.Areas.Admin.ViewModels.RecipesViewModel
+@{
+    ViewData["Title"] = "Admin - Pending Recipes";
+    ViewData["PageName"] = "Pending Recipes";
+}
+
+<div class="row">
+    <div class="col mt-4">
+        <h3 class="ml-2">Pending Recipes</h3>
+        <div class="row mt-4">
+            @foreach (var recipe in Model.Recipes)
+            {
+                <div class="col-12 col-md-6">
+                    <div class="row d-flex align-items-center bg-white shadow-sm rounded m-2 p-3">
+                        <div class="col-2 p-0" style="max-width: 40px">
+                            <a asp-area="" asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.RecipeID" class="text-dark text-decoration-none">
+                                @if (Model.Recipes.Where(r => r.RecipeID == recipe.RecipeID).FirstOrDefault().PictureName != null)
+                                {
+                                    <img src="@("/img/recipes/"+Model.Recipes.Where(r => r.RecipeID == recipe.RecipeID).FirstOrDefault().PictureName)"
+                                         class="img-fluid rounded shadow-sm mr-3"
+                                         alt="Recipe image" style="width: 40px; height: 40px;" />
+                                }
+                                else
+                                {
+                                    <img src="~/img/orange-background.jpg"
+                                         class="img-fluid rounded shadow-sm mr-3"
+                                         alt="Recipe image" style="width: 40px; height: 40px;" />
+                                }
+                            </a>
+                        </div>
+                        <div class="col-8">
+                            <div class="row">
+                                <div class="col font-weight-bold">
+                                    <a asp-area="" asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.RecipeID" class="text-dark text-decoration-none">
+                                        @Model.Recipes.Where(r => r.RecipeID == recipe.RecipeID).FirstOrDefault().Title
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <p class="small text-muted m-0">
+                                        <a asp-area="" asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.RecipeID" class="text-dark text-decoration-none">
+                                            @if (Model.Recipes.Where(r => r.RecipeID == recipe.RecipeID).FirstOrDefault().Description.Length > 30)
+                                            {
+                                                @(Model.Recipes.Where(r => r.RecipeID == recipe.RecipeID).FirstOrDefault().Description.Substring(0, 30))<span>...</span>
+                                            }
+                                            else
+                                            {
+                                                @Model.Recipes.Where(r => r.RecipeID == recipe.RecipeID).FirstOrDefault().Description
+                                            }
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <span class="float-right">
+                                <button onclick="rejectRecipe('@Url.Action("ChangeStatus","Pending", new {id=recipe.RecipeID, approved=false}, Context.Request.Scheme)')" class="btn nav-link float-right p-0 ml-3" title="Reject" style="color: red"><i class="icofont-ui-close h5"></i></button>
+                            </span>
+                            <span class="float-right">
+                                <button onclick="approveRecipe('@Url.Action("ChangeStatus","Pending", new {id=recipe.RecipeID, approved=true}, Context.Request.Scheme)')" class="btn nav-link float-right p-0" title="Accept" style="color: forestgreen"><i class="icofont-ui-check h5"></i></button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (Model.Recipes.Count() == 0)
+            {
+                <div class="col center-block text-center align-self-center" style="margin-top: 10%">
+                    <h4 class="text-secondary">No Pending Recipes</h4>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script src="~/js/pending.js"></script>
+}

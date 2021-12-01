@@ -60,5 +60,7 @@ namespace SelfChef.Models
         public string Category { get; set; }
 
         public string Cuisine { get; set; }
+        
+        public string Status { get; set; }
     }
 }

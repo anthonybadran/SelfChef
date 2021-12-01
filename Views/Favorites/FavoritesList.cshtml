@@ -1,0 +1,57 @@
+﻿@model SelfChef.ViewModels.FavoritesViewModel
+
+@{
+    Layout = null;
+}
+
+@foreach (var favorite in Model.Favorites)
+{
+    <div class="col-12 col-md-6">
+        <div class="row d-flex align-items-center bg-white shadow-sm rounded m-2 p-3">
+            <div class="col-2 p-0" style="max-width: 40px">
+                <a asp-controller="Recipes" asp-action="Details" asp-route-id="@favorite.RecipeID" class="text-dark text-decoration-none">
+                    @if (Model.Recipes.Where(r => r.RecipeID == favorite.RecipeID).FirstOrDefault().PictureName != null)
+                    {
+                        <img src="@("/img/recipes/"+Model.Recipes.Where(r => r.RecipeID == favorite.RecipeID).FirstOrDefault().PictureName)"
+                             class="img-fluid rounded shadow-sm mr-3"
+                             alt="Recipe image" style="width: 40px; height: 40px;" />
+                    }
+                    else
+                    {
+                        <img src="~/img/orange-background.jpg"
+                             class="img-fluid rounded shadow-sm mr-3"
+                             alt="Recipe image" style="width: 40px; height: 40px;" />
+                    }
+                </a>
+            </div>
+            <div class="col-8">
+                <a asp-controller="Recipes" asp-action="Details" asp-route-id="@favorite.RecipeID" class="text-dark">
+                    <div class="row">
+                        <div class="col font-weight-bold">
+                            @Model.Recipes.Where(r => r.RecipeID == favorite.RecipeID).FirstOrDefault().Title
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="small text-muted m-0">
+                                @if (Model.Recipes.Where(r => r.RecipeID == favorite.RecipeID).FirstOrDefault().Description.Length > 30)
+                                {
+                                    @(Model.Recipes.Where(r => r.RecipeID == favorite.RecipeID).FirstOrDefault().Description.Substring(0, 30))<span>...</span>
+                                }
+                                else
+                                {
+                                    @Model.Recipes.Where(r => r.RecipeID == favorite.RecipeID).FirstOrDefault().Description
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col">
+                <span class="float-right">
+                    <button onclick="manageFavorites('@Url.Action("AddToFavorites","Favorites", new {recipe=ViewBag.RecipeID, user=ViewBag.user}, Context.Request.Scheme)')" class="btn nav-link text-success float-right p-0" title="Remove from Favorites"><i class="icofont-heart h3"></i></button>
+                </span>
+            </div>
+        </div>
+    </div>
+}

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SelfChef.Data;
 
 namespace SelfChef.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211122152224_FavoritesDrop")]
+    partial class FavoritesDrop
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,20 +260,6 @@ namespace SelfChef.Migrations
                     b.ToTable("Cuisines");
                 });
 
-            modelBuilder.Entity("SelfChef.Models.Favorites", b =>
-                {
-                    b.Property<string>("AuthorID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("RecipeID")
-                        .HasColumnType("int");
-
-                    b.HasKey("AuthorID", "RecipeID")
-                        .HasName("Favorites_PK");
-
-                    b.ToTable("Favorites");
-                });
-
             modelBuilder.Entity("SelfChef.Models.RecipeDirections", b =>
                 {
                     b.Property<int>("RecipeID")
@@ -400,9 +388,6 @@ namespace SelfChef.Migrations
 
                     b.Property<double>("Servings")
                         .HasColumnType("float");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
                         .IsRequired()

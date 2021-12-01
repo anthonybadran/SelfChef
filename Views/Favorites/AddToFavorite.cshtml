@@ -1,0 +1,31 @@
+﻿@model IEnumerable<SelfChef.Models.Favorites>
+@using Microsoft.AspNetCore.Identity
+@using SelfChef.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    Layout = null;
+    var currentUser = await UserManager.GetUserAsync(User);
+}
+
+@*<button class="noPrint btn nav-link text-secondary float-right p-0 ml-2"><i class="icofont-share h3"></i></button>*@
+<button onclick="window.print();" class="noPrint btn nav-link text-secondary float-right p-0 ml-2"><i class="icofont-print h3"></i></button>
+
+@if (SignInManager.IsSignedIn(User))
+{
+    @if (Model.Where(v => v.AuthorID == currentUser.Id && v.RecipeID == ViewBag.RecipeID).FirstOrDefault() != null)
+    {
+        <button onclick="addToFavorites('@Url.Action("AddToFavorites","Favorites", new {recipe=ViewBag.RecipeID, user=currentUser.Id}, Context.Request.Scheme)')" class="noPrint btn nav-link text-success float-right p-0" title="Add to Favorites"><i class="icofont-heart h3"></i></button>
+    }
+    else
+    {
+        <button onclick="addToFavorites('@Url.Action("AddToFavorites","Favorites", new {recipe=ViewBag.RecipeID, user=currentUser.Id}, Context.Request.Scheme)')" class="noPrint btn nav-link text-secondary float-right p-0" title="Add to Favorites"><i class="icofont-heart h3"></i></button>
+    }
+}
+else
+{
+    <a href="/Identity/Account/Login?ReturnUrl=/Recipes/Details/@ViewBag.RecipeID" class="noPrint text-secondary float-right">
+        <i class="icofont-heart h3"></i>
+    </a>
+}

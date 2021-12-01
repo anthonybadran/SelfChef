@@ -1,0 +1,8 @@
+﻿header, footer, aside, nav, form, iframe, .menu, .breadcrumb, .subheader, .heading, .noPrint {
+    display: none !important;
+}
+
+@page {
+    size: auto !important;
+    margin: 10px !important;
+}

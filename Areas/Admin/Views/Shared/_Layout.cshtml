@@ -1,0 +1,190 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using SelfChef.Data
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{ 
+    var user = await UserManager.GetUserAsync(User);
+    var firstName = user?.FirstName;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SelfChef</title>
+    <link rel="icon" href="~/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="~/lib/slick/slick.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/slick/slick-theme.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/icons/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/theme.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/sidebar/demo.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/select2/css/select2.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/tagsinput/tagsinput.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/toastr/toastr.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+    @RenderSection("Head", required: false)
+</head>
+<body>
+    <header>
+        <div class="border-bottom p-3 d-none mobile-nav">
+            <div class="row title d-flex align-items-center">
+                <div class="col-6">
+                    <a asp-controller="Home" asp-action="Index" class="text-decoration-none text-dark">
+                        <img class="mr-2" style="width: 40%" src="~/img/logo.png" />
+                    </a>
+                </div>
+                <div class="col-6">
+                    <a class="toggle" href="#" style="float:right">
+                        <i class="icofont-navigation-menu"></i>
+                    </a>
+                </div>
+            </div>
+            <a href="#" class="text-decoration-none">
+                <form asp-controller="Home" asp-action="Index">
+                    <div class="input-group mt-3 rounded shadow-sm overflow-hidden bg-white">
+                        <div class="input-group-prepend">
+                            <button type="submit" value="Filter" class="border-0 btn btn-outline-secondary text-success bg-white">
+                                <i class="icofont-search"></i>
+                            </button>
+                        </div>
+                        <input type="text" name="SearchString"
+                               class="shadow-none border-0 form-control pl-0"
+                               placeholder="Search for Recipes.."
+                               value="@ViewBag.query"
+                               aria-label=""
+                               aria-describedby="basic-addon1" />
+                    </div>
+                </form>
+            </a>
+        </div>
+        @*<div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider round"></div>
+                    <i class="icofont-moon"></i>
+                </label>
+                <em>Enable Dark Mode!</em>
+            </div>*@
+        <div class="bg-white shadow-sm osahan-main-nav">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white osahan-header py-0 fixed-top shadow-sm">
+                <div class="container">
+                    <div class="d-flex align-items-start" style="width:25%">
+                        <a asp-controller="Home" asp-action="Index" class="mr-auto navbar-brand mr-0">
+                            <img class="ml-auto img-fluid logo-img" src="~/img/logo.png" />
+                        </a>
+                    </div>
+                    <button class="navbar-toggler"
+                            type="button"
+                            data-toggle="collapse"
+                            data-target="#navbarSupportedContent"
+                            aria-controls="navbarSupportedContent"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="d-flex align-items-end">
+                        <partial name="_LoginPartial" />
+                    </div>
+                </div>
+            </nav>
+            <div class="bg-color-head">
+                <div class="container menu-bar d-flex align-items-center">
+                    <ul class="list-unstyled form-inline mb-0">
+                        <li class="nav-item active">
+                            <a class="nav-link text-white pl-0" asp-area="Admin" asp-controller="Pending" asp-action="Index">Pending Recipes<span class="badge badge-secondary ml-1"></span></a>
+                        </li>
+                        <li>
+                            <a class="nav-link text-white" asp-area="Admin" asp-controller="Manage" asp-action="Index">Manage Recipes</a>
+                        </li>
+                        <li>
+                            <a class="nav-link text-white" asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a>
+                        </li>
+                    </ul>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <div class="list-unstyled form-inline mb-0 ml-auto">
+                            <a asp-area="" asp-controller="Home" asp-action="Index" asp-route-id="" class="text-white bg-offer px-3 py-2"><i class="icofont-reply mr-1"></i>Return to App</a>
+                        </div>
+                    }
+                </div>
+            </div>
+            <nav aria-label="breadcrumb" class="breadcrumb mb-0">
+                <div class="container">
+                    <ol class="d-flex align-items-center mb-0 p-0">
+                        <li class="breadcrumb-item">
+                            <a asp-area="Admin" asp-controller="Pending" asp-action="Index" class="text-success">Admin</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            @ViewData["PageName"]
+                        </li>
+                    </ol>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <nav id="main-nav">
+        <ul class="second-nav">
+            @if (!SignInManager.IsSignedIn(User))
+            {
+                <li>
+                    <a href="#"><i class="icofont-login mr-2"></i>Authentication</a>
+                    <ul>
+                        <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Login">Sign In</a></li>
+                        <li><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Register">Sign Up</a></li>
+                    </ul>
+                </li>
+            }
+            else
+            {
+                <li>
+                    <a id="manage" class="nav-link text-dark ml-auto" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello, @firstName!</a>
+                </li>
+            }
+            <li>
+                <a asp-area="Admin" asp-controller="Pending" asp-action="Index">Pending Recipes</a>
+            </li>
+            <li>
+                <a asp-area="Admin" asp-controller="Manage" asp-action="Index">Manage Recipes</a>
+            </li>
+            <li>
+                <a asp-area="Admin" asp-controller="Users" asp-action="Index">Users</a>
+            </li>
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <li>
+                    <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button id="logout" type="submit" class="nav-link btn btn-link text-success m-0 p-0"><i class="icofont-logout mr-2"></i>Logout</button>
+                    </form>
+                </li>
+            }
+        </ul>
+    </nav>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2021 - Self-Chef
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="~/lib/slick/slick.min.js"></script>
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <script src="~/lib/sidebar/hc-offcanvas-nav.js"></script>
+    <script src="~/lib/tagsinput/tagsinput.js"></script>
+    <script src="~/js/toastr/toastr.min.js"></script>
+    <script src="~/js/osahan.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

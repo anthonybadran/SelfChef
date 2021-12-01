@@ -30,7 +30,7 @@
                                 <a class="btn btn-link p-0" href="javascript:void(0)" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                                     <span class="font-weight-bold">&#8942;</span>
                                 </a>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="min-width: 0px">
                                     <li><button class="dropdown-item" onclick="showInPopup('@Url.Action("AddOrEdit","Reviews",new {id=review.ReviewID, recipe=review.RecipeID},Context.Request.Scheme)','Edit Review')">Edit</button></li>
                                     <li><button class="dropdown-item" onclick="jQueryAjaxDelete('@(review.ReviewID.ToString())')">Delete</button></li>
                                 </ul>
