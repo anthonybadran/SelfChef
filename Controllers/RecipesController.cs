@@ -78,13 +78,13 @@ namespace SelfChef.Controllers
             }
             else
             {
-                if (user.Id != recipe.Author)
+                if (user.Id == recipe.Author || await _manager.IsInRoleAsync(user, "Admin"))
                 {
-                    return NotFound();
+                    _context.Update(recipe);
+                    _context.SaveChanges();
+                    return RedirectToAction(nameof(Index), "Home");
                 }
-                _context.Update(recipe);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index), "Home");
+                return NotFound();
             }
         }
 
@@ -179,14 +179,13 @@ namespace SelfChef.Controllers
         {
             var user = await _manager.GetUserAsync(HttpContext.User);
             var recipe = await _context.Recipes.FindAsync(id);
-            if (user.Id != recipe.Author)
+            if (user.Id == recipe.Author || await _manager.IsInRoleAsync(user, "Admin"))
             {
-                return Json("Not Allowed");
+                _context.Recipes.Remove(recipe);
+                _context.SaveChanges();
+                return Json("Recipe successfully deleted.");
             }
-            _context.Recipes.Remove(recipe);
-            _context.SaveChanges();
-            return Json("Recipe successfully deleted.");
-
+            return Json("Not Allowed");
         }
     }
 }

@@ -1,0 +1,89 @@
+﻿@using SelfChef.Data
+@model IEnumerable<ApplicationUser>
+@{
+    ViewData["Title"] = "Admin - Users";
+    ViewData["PageName"] = "Users";
+}
+
+<div class="row">
+    <div class="col-12 mt-4">
+        <div class="row">
+            <div class="col-6">
+                <h3>Users</h3>
+            </div>
+            <div class="col-6">
+                <a class="btn btn-sm btn-success float-right" asp-area="Admin" asp-controller="ManageUsers" asp-action="Create">Add User</a>
+            </div>
+        </div>
+        <div class="row mt-4">
+            <div class="col-12">
+                <table id="index-table" class="table table-sm table-bordered table-hover table-striped w-100 nowrap">
+                    <thead class="bg-success">
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th>
+                                First Name
+                            </th>
+                            <th>
+                                Last Name
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                            <th>
+                                Phone
+                            </th>
+                            <th>
+                                ID (Internal)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <a class="detail" href="@Url.Action("Edit","ManageUsers", new {id = user.Id})">
+                                        <i class="icofont-listine-dots"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="delete" href="javascript:void(0)" onclick='return deleteUser("@Url.Action("Delete", "ManageUsers", new { id = user.Id })")'>
+                                        <i class="icofont-ui-delete text-danger"></i>
+                                    </a>
+                                </td>
+                                <td>
+                                    @user.FirstName
+                                </td>
+                                <td>
+                                    @user.LastName
+                                </td>
+                                <td>
+                                    @user.Email
+                                </td>
+                                <td>
+                                    @user.PhoneNumber
+                                </td>
+                                <td>
+                                    @user.Id
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @if (Model.Count() == 0)
+            {
+                <div class="col center-block text-center align-self-center" style="margin-top: 10%">
+                    <h4 class="text-secondary">No Registered Users Yet</h4>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script src="~/js/users.js"></script>
+}

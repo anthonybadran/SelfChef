@@ -63,5 +63,10 @@ namespace SelfChef.Data
                     .HasName("Review_Votes_PK");
             });
         }
+
+        internal Task DeleteAsync<T>(string id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

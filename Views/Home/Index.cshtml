@@ -33,7 +33,6 @@
     {
         var reviews = Model.Reviews.Where(r => r.RecipeID == recipe.RecipeID).ToList();
         int sumRatings = 0;
-        double sumReviews = 0;
         int avgRatings = 0;
         foreach (var review in reviews)
         {

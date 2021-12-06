@@ -1,0 +1,74 @@
+﻿@using SelfChef.Data
+@model ApplicationUser
+@{
+    ViewData["Title"] = "Admin - Edit User";
+    ViewData["PageName"] = "Edit User";
+}
+
+<div class="row">
+    <div class="col-sm-10 col-md-8 col-lg-6 mx-auto mt-4">
+        <div class="osahan-signup shadow bg-white p-4 rounded">
+            <div class="px-2">
+                <h3 class="my-0">Edit User</h3>
+                <form asp-area="Admin" asp-controller="ManageUsers" asp-action="Edit" method="post" class="needs-validation" novalidate>
+                    <div asp-validation-summary="ModelOnly" class="form-group text-danger"></div>
+                    <input type="hidden" asp-for="Id"/>
+                    <input type="hidden" asp-for="SecurityStamp"/>
+                    <input type="hidden" asp-for="ConcurrencyStamp"/>
+                    <div class="row mt-3">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label asp-for="FirstName">First Name <span class="text-danger">*</span></label>
+                                <input asp-for="FirstName" class="form-control" required />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label asp-for="LastName">Last Name <span class="text-danger">*</span></label>
+                                <input asp-for="LastName" class="form-control" required />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email">Email <span class="text-danger">*</span></label>
+                        <input asp-for="Email" type="email" class="form-control" required />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="PhoneNumber"></label>
+                        <input asp-for="PhoneNumber" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-success rounded btn-lg btn-block">
+                        Save
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        (function () {
+            'use strict';
+            window.addEventListener('load', function () {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+}

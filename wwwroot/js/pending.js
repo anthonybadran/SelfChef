@@ -28,7 +28,8 @@ approveRecipe = (url) => {
                     setTimeout(function () { location.reload(); }, 2000);
                 },
                 error: function (err) {
-                    console.log(err)
+                    console.log(err);
+                    toastr["error"](err, "Error");
                 }
             })
         } catch (ex) {
@@ -51,7 +52,8 @@ rejectRecipe = (url) => {
                     setTimeout(function () { location.reload(); }, 2000);
                 },
                 error: function (err) {
-                    console.log(err)
+                    console.log(err);
+                    toastr["error"](err, "Error");
                 }
             })
         } catch (ex) {

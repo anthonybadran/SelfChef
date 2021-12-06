@@ -1,0 +1,112 @@
+﻿@model SelfChef.Areas.Admin.ViewModels.RecipesViewModel
+@{
+    ViewData["Title"] = "Admin - Manage Recipes";
+    ViewData["PageName"] = "Manage Recipes";
+}
+
+<div class="row">
+    <div class="col mt-4">
+        <h3 class="ml-2">Manage Recipes</h3>
+        <div class="row">
+            <form asp-area="Admin" asp-controller="ManageRecipes" asp-action="Index">
+                <div class="col-lg-12 p-3">
+                    <div class="input-group ml-auto" style="width: 25em">
+                        <input type="text" name="SearchString"
+                               class="form-control"
+                               id="inlineFormInputGroupUsername2"
+                               value="@ViewBag.query"
+                               placeholder="Search for Recipes.." />
+                        <div class="input-group-prepend">
+                            <button type="submit" value="Filter" class="btn btn-success rounded-right">
+                                <i class="icofont-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row mt-4">
+            @foreach (var recipe in Model.Recipes)
+            {
+                var user = Model.Users.Where(u => u.Id == recipe.Author).FirstOrDefault();
+                <div class="col-12 col-md-6">
+                    <div class="row d-flex align-items-center bg-white shadow-sm rounded m-2 p-3">
+                        <div class="col-2 p-0" style="max-width: 40px">
+                            <a asp-area="" asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.RecipeID" class="text-dark text-decoration-none">
+                                @if (recipe.PictureName != null)
+                                {
+                                    <img src="@("/img/recipes/"+recipe.PictureName)"
+                                         class="img-fluid rounded shadow-sm mr-3"
+                                         alt="Recipe image" style="width: 40px; height: 40px;" />
+                                }
+                                else
+                                {
+                                    <img src="~/img/orange-background.jpg"
+                                         class="img-fluid rounded shadow-sm mr-3"
+                                         alt="Recipe image" style="width: 40px; height: 40px;" />
+                                }
+                            </a>
+                        </div>
+                        <div class="col-8">
+                            <div class="row">
+                                <div class="col font-weight-bold">
+                                    <a asp-area="" asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.RecipeID" class="text-dark text-decoration-none">
+                                        @recipe.Title
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <p class="small text-muted m-0">
+                                        <a asp-area="" asp-controller="Recipes" asp-action="Details" asp-route-id="@recipe.RecipeID" class="text-dark text-decoration-none">
+                                            @if (recipe.Description.Length > 30)
+                                            {
+                                                @(recipe.Description.Substring(0, 30))<span>...</span>
+                                            }
+                                            else
+                                            {
+                                                @recipe.Description
+                                            }
+                                        </a>
+                                    </p>
+                                    <p class="m-0 mt-1">
+                                        @if (user == null)
+                                        {
+                                            <span class="text-muted small">By Unknown</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted small">By @user.FirstName @user.LastName</span>
+                                        }
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="dropdown float-right">
+                                <a class="btn btn-link p-0" href="javascript:void(0)" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="font-weight-bold">&#8942;</span>
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="min-width: 0px">
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Recipes" asp-action="AddOrEdit" asp-route-id="@recipe.RecipeID">Edit</a></li>
+                                    <li><button class="dropdown-item" onclick="deleteRecipe('@Url.Action("Delete","ManageRecipes", new {id=recipe.RecipeID}, Context.Request.Scheme)')">Delete</button></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (Model.Recipes.Count() == 0)
+            {
+                <div class="col center-block text-center align-self-center" style="margin-top: 10%">
+                    <h4 class="text-secondary">Sorry, No Recipes Added :(</h4>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    <script src="~/js/myrecipes.js"></script>
+}
