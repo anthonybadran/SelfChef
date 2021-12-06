@@ -198,19 +198,28 @@
                                                 <div class="row mt-2">
                                                     <div class="col-sm-6 mt-3">
                                                         <label asp-for="PrepTime">Prep. Time (min)<span class="text-danger">*</span></label>
-                                                        <input id="preptime" asp-for="PrepTime" class="form-control" type="number" step="0.01" />
+                                                        <input id="preptime" asp-for="PrepTime" class="form-control integer" min="1" />
+                                                        <div class="invalid-feedback">
+                                                            PrepTime should be at least 1.
+                                                        </div>
                                                         <span asp-validation-for="PrepTime" class="text-danger"></span>
                                                     </div>
                                                     <div class="col-sm-6 mt-3">
                                                         <label asp-for="CookTime">Cook Time (min)<span class="text-danger">*</span></label>
-                                                        <input id="cooktime" asp-for="CookTime" class="form-control" type="number" step="0.01" />
+                                                        <input id="cooktime" asp-for="CookTime" class="form-control integer" min="1" />
+                                                        <div class="invalid-feedback">
+                                                            CookTime should be at least 1.
+                                                        </div>
                                                         <span asp-validation-for="CookTime" class="text-danger"></span>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-sm-6 mt-3">
                                                         <label asp-for="Servings">Servings (plate)<span class="text-danger">*</span></label>
-                                                        <input id="servings" asp-for="Servings" class="form-control" type="number" step="0.01" />
+                                                        <input id="servings" asp-for="Servings" class="form-control integer" min="1" />
+                                                        <div class="invalid-feedback">
+                                                            Servings should be at least 1.
+                                                        </div>
                                                         <span asp-validation-for="Servings" class="text-danger"></span>
                                                     </div>
                                                 </div>
@@ -308,6 +317,7 @@
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <script src="~/lib/dropzone-5.7.0/dropzone.min.js"></script>
     <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <script src="~/js/inputmask/inputmask.bundle.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
         (function () {
@@ -413,6 +423,15 @@
             $('.js-example-basic-multiple').select2({
                 placeholder: 'Choose one or many items',
             });
+            $(":input").inputmask();
+            Inputmask.extendAliases({
+                'integer': {
+                    min: 1,
+                    allowPlus: false,
+                    allowMinus: false,
+                }
+            });
+            $(".integer").inputmask("integer");
         });
     </script>
 </body>

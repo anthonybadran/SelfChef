@@ -137,6 +137,10 @@ namespace SelfChef.Controllers
                 }
                 ViewBag.avgRatings = avgRatings;
                 var recipe = _context.Recipes.Find(id);
+                if (recipe == null)
+                {
+                    return NotFound();
+                }
                 return View(recipe);
             }
         }
@@ -183,6 +187,30 @@ namespace SelfChef.Controllers
             {
                 _context.Recipes.Remove(recipe);
                 _context.SaveChanges();
+                var reviews = _context.RecipeReviews.Where(a => a.RecipeID == id).ToList();
+                foreach (var review in reviews)
+                {
+                    _context.RecipeReviews.Remove(review);
+                    _context.SaveChanges();
+
+                    var votes = _context.ReviewVotes.Where(a => a.ReviewID == review.ReviewID).ToList();
+                    foreach (var vote in votes)
+                    {
+                        _context.ReviewVotes.Remove(vote);
+                        _context.SaveChanges();
+                    }
+                }
+                var favorites = _context.Favorites.Where(a => a.RecipeID == id).ToList();
+                foreach (var favorite in favorites)
+                {
+                    _context.Favorites.Remove(favorite);
+                    _context.SaveChanges();
+                }
+                if (System.IO.File.Exists(recipe.Picture))
+                {
+                    System.IO.File.Delete(recipe.Picture);
+                    return Json("Picture successfully removed.");
+                }
                 return Json("Recipe successfully deleted.");
             }
             return Json("Not Allowed");

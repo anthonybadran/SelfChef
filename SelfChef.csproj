@@ -17,6 +17,7 @@
     <None Include="Views\Reviews\AddOrEdit.cshtml" />
     <None Include="Views\Reviews\ViewReviews.cshtml" />
     <None Include="wwwroot\css\toastr\toastr.css.map" />
+    <None Include="wwwroot\js\inputmask\inputmask.bundle.js" />
     <None Include="wwwroot\js\toastr\toastr.js" />
   </ItemGroup>
 
