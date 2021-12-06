@@ -1,17 +1,7 @@
-/*
-Template Name: Vegishop - Online Grocery Supermarket HTML Template
-Author: Gurdeep Osahan
-Author URI: https://wrapbootstrap.com/user/gurdeep
-Version: 1.0
-*/
-
 (function($) {
-"use strict"; // Start of use strict
+"use strict"; 
+    $('[data-toggle="tooltip"]').tooltip();
 
-// Tooltip
-$('[data-toggle="tooltip"]').tooltip();
-
-// Categories Slider
 $('.categories-slider').slick({
   slidesToScroll: 3,
   slidesToShow: 8,
@@ -38,7 +28,6 @@ $('.categories-slider').slick({
   ]
 });
 
-// Categories Slider
 $('.promo-slider').slick({
   slidesToShow: 3,
   arrows: true,
@@ -66,7 +55,6 @@ $('.promo-slider').slick({
   ]
 });
 
-// Osahan Slider
 $('.osahan-slider').slick({
   centerMode: false,
   slidesToShow: 1,
@@ -74,7 +62,6 @@ $('.osahan-slider').slick({
   dots: true
 });
 
-// Recommend Slider
 $('.recommend-slider2').slick({
   infinite: true,
   speed: 300,
@@ -87,7 +74,6 @@ $('.recommend-slider2').slick({
   
 });
 
-// Recommend Slider
 $('.recommend-slider').slick({
   infinite: true,
   speed: 300,
@@ -98,7 +84,6 @@ $('.recommend-slider').slick({
   autoplay: true
 });
 
-// Trending Slider
 $('.trending-slider').slick({
   centerPadding: '30px',
   slidesToShow: 4,
@@ -126,7 +111,6 @@ $('.trending-slider').slick({
   ]
 });
 
-// Sidebar
 var $main_nav = $('#main-nav');
   var $toggle = $('.toggle');
 
@@ -141,33 +125,10 @@ var $main_nav = $('#main-nav');
       insertClose: 2
   };
 
-// call our plugin
 var Nav = $main_nav.hcOffcanvasNav(defaultOptions);  
 
-// Dark Mode
-/*const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
-const currentTheme = localStorage.getItem('theme');
-if (currentTheme) {
-    document.documentElement.setAttribute('class', currentTheme);
-  
-    if (currentTheme === 'dark') {
-        toggleSwitch.checked = true;
-    }
-}
-function switchTheme(e) {
-    if (e.target.checked) {
-        document.documentElement.setAttribute('class', 'dark');
-        localStorage.setItem('theme', 'dark');
-    }
-    else {        document.documentElement.setAttribute('class', 'light');
-          localStorage.setItem('theme', 'light');
-    }    
-}
-toggleSwitch.addEventListener('change', switchTheme, false);*/
+})(jQuery);
 
-})(jQuery); // End of use strict
-
-// Quantity JS
 jQuery(document).ready(function(){
   // This button will increment the value
   $('.qtyplus').click(function(e){
